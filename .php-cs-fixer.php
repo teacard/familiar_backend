@@ -20,7 +20,7 @@ foreach ($directories as $directory) {
 }
 
 $finder->notName('*.blade.php')
-    ->notPath('bootstrap/cache');
+    ->exclude('cache');
 
 $PSR12 = [
     'blank_line_after_opening_tag' => true,
