@@ -19,7 +19,8 @@ foreach ($directories as $directory) {
     $finder->in(__DIR__ . '/' . $directory);
 }
 
-$finder->notName('*.blade.php');
+$finder->notName('*.blade.php')
+    ->notPath('bootstrap/cache');
 
 $PSR12 = [
     'blank_line_after_opening_tag' => true,
