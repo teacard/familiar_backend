@@ -55,7 +55,7 @@ jobs:
 
       # 程式碼風格驗證：只檢查不修改，不符合規則則失敗
       - name: Code style (PHP CS Fixer)
-        run: ./vendor/bin/php-cs-fixer check --no-show-progress
+        run: ./vendor/bin/php-cs-fixer check --show-progress=none
 
       # 測試：phpunit.xml 已設定用 SQLite in-memory，無需真實 DB
       - name: Run tests
