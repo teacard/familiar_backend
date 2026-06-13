@@ -53,9 +53,9 @@ jobs:
       - name: PHP syntax check
         run: find app bootstrap config database routes -name "*.php" -print0 | xargs -0 -n1 php -l
 
-      # 程式碼風格驗證：--dry-run 只檢查不修改，不符合 PSR-12 則失敗
+      # 程式碼風格驗證：只檢查不修改，不符合規則則失敗
       - name: Code style (PHP CS Fixer)
-        run: ./vendor/bin/php-cs-fixer check --diff
+        run: ./vendor/bin/php-cs-fixer check --no-show-progress
 
       # 測試：phpunit.xml 已設定用 SQLite in-memory，無需真實 DB
       - name: Run tests
