@@ -1,4 +1,5 @@
 *.log
+.php-cs-fixer.cache
 .DS_Store
 .env
 .env.backup
