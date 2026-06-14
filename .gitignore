@@ -1,32 +1,54 @@
-*.log
-.php-cs-fixer.cache
-.DS_Store
+# 環境設定
 .env
 .env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
 /auth.json
+
+# 套件依賴
+/vendor
 /node_modules
+
+# Laravel 框架產生
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
 /storage/*.key
-/storage/api-docs/
 /storage/pail
-/vendor
+
+# Swagger / API 文件（自動產生）
+/storage/api-docs/
+
+# 測試快取
+.phpunit.result.cache
+/.phpunit.cache
+
+# 程式碼風格工具
+.php-cs-fixer.cache
+
+# IDE 與編輯器
+/.idea
+/.vscode
+/.cursor/
+/.nova
+/.zed
+.phpactor.json
 _ide_helper.php
+
+# 本地開發環境
 Homestead.json
 Homestead.yaml
+
+# AI 工具
+/.codex
+.claude
+
+# 作業系統
+.DS_Store
 Thumbs.db
 
-# claude
-.claude
+# 日誌
+*.log
+
+# 專案工具
+openspec/
