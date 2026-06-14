@@ -61,6 +61,9 @@ jobs:
       - name: Run tests
         run: php artisan test
 
+      - name: Generate Swagger docs
+        run: php artisan l5-swagger:generate --all
+
   # ────────────────────────────────────────────
   # Job 2：觸發 game-docker repo 建置 image 並部署
   # Build 已移至 docker repo 統一管理 Dockerfile
