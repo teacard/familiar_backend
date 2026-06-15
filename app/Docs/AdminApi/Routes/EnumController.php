@@ -2,8 +2,8 @@
 
 namespace App\Docs\AdminApi\Routes;
 
-use App\Docs\All\Responses\OkResponse;
 use App\Docs\AdminApi\ResponseContents\Enum\EnumResponseContent;
+use App\Docs\All\Responses\OkResponse;
 use OpenApi\Attributes as OA;
 
 class EnumController

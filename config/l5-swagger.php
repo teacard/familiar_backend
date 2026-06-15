@@ -110,7 +110,7 @@ return [
              * 可選的自訂 Generator 工廠類別，用於建立 OpenApi\Generator 實例。
              * 若需要使用預先配置好的自訂 Generator，可在此指定實作 CustomGeneratorInterface 的類別名稱或實例。
              *
-             * @see \L5Swagger\CustomGeneratorInterface
+             * @see L5Swagger\CustomGeneratorInterface
              */
             'generator_factory' => null,
 
@@ -119,11 +119,11 @@ return [
              *
              * 預設處理器的設定，可將自訂配置傳遞給 swagger-php 的各處理器。
              *
-             * @link https://zircote.github.io/swagger-php/reference/processors.html
+             * @see https://zircote.github.io/swagger-php/reference/processors.html
              */
             'default_processors_configuration' => [
-                /** Example */
-                /**
+            /** Example */
+            /**
              * 'operationId.hash' => true,
              * 'pathFilter' => [
              * 'tags' => [
@@ -139,7 +139,7 @@ return [
              *
              * 指定程式碼分析器，預設為 \OpenApi\StaticAnalyser。
              *
-             * @see \OpenApi\scan
+             * @see OpenApi\scan
              */
             'analyser' => null,
 
@@ -148,7 +148,7 @@ return [
              *
              * 指定分析結果容器，預設會建立一個新的 \OpenApi\Analysis 實例。
              *
-             * @see \OpenApi\scan
+             * @see OpenApi\scan
              */
             'analysis' => null,
 
@@ -165,8 +165,8 @@ return [
              * - 類別名稱或實例（預設插入在 BuildPaths 之後）
              * - 包含 'class' 與 'after' 鍵的陣列，用於精確指定插入位置
              *
-             * @link https://github.com/zircote/swagger-php/tree/master/Examples/processors/schema-query-parameter
-             * @see \OpenApi\scan
+             * @see https://github.com/zircote/swagger-php/tree/master/Examples/processors/schema-query-parameter
+             * @see OpenApi\scan
              */
             'processors' => [
                 // \App\SwaggerProcessors\SchemaQueryParameter::class,
@@ -178,7 +178,7 @@ return [
              *
              * 指定掃描的檔案比對模式，預設為 *.php（掃描所有 PHP 檔案）。
              *
-             * @see \OpenApi\scan
+             * @see OpenApi\scan
              */
             'pattern' => null,
 
@@ -197,7 +197,7 @@ return [
              *
              * 指定產生的 API 規格版本，可選 OpenAPI 3.0.0 或 3.1.0，預設為 3.0.0。
              */
-            'open_api_spec_version' => env('L5_SWAGGER_OPEN_API_SPEC_VERSION', \L5Swagger\Generator::OPEN_API_DEFAULT_SPEC_VERSION),
+            'open_api_spec_version' => env('L5_SWAGGER_OPEN_API_SPEC_VERSION', L5Swagger\Generator::OPEN_API_DEFAULT_SPEC_VERSION),
         ],
 
         /*
@@ -230,7 +230,7 @@ return [
                 ],
                 */
 
-                /* Open API 3.0 support
+            /* Open API 3.0 support
                 'passport' => [ // Unique name of security
                     'type' => 'oauth2', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
                     'description' => 'Laravel passport oauth2 security.',
@@ -258,7 +258,7 @@ return [
                  * 安全性套用範例（指定哪些端點預設要求認證）
                  */
                 [
-                    /*
+                /*
                     'oauth2_security_example' => [
                         'read',
                         'write'

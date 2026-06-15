@@ -24,7 +24,7 @@ class OkResponse extends OA\Response
         string|object|null $contentItemsRef = null,
         ?array $contentItemsProperties = null,
     ) {
-        $hasItems = ! is_null($contentItemsRef) || ! is_null($contentItemsProperties);
+        $hasItems = !is_null($contentItemsRef) || !is_null($contentItemsProperties);
 
         parent::__construct(
             response: Response::HTTP_OK,
@@ -33,8 +33,8 @@ class OkResponse extends OA\Response
                 properties: [
                     new OA\Property(
                         property: 'data',
-                        ref: (! $hasItems && ! is_null($contentRef)) ? $contentRef : null,
-                        type: $hasItems ? 'array' : (! is_null($contentProperties) ? 'object' : null),
+                        ref: (!$hasItems && !is_null($contentRef)) ? $contentRef : null,
+                        type: $hasItems ? 'array' : (!is_null($contentProperties) ? 'object' : null),
                         properties: $contentProperties,
                         items: $hasItems ? new Items(
                             ref: $contentItemsRef,

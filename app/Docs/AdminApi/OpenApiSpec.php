@@ -27,4 +27,6 @@ use OpenApi\Attributes as OA;
     description: '身份認證金鑰',
     scheme: 'bearer',
 )]
-class OpenApiSpec {}
+class OpenApiSpec
+{
+}

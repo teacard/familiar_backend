@@ -2,4 +2,6 @@
 
 namespace App\Docs\Default;
 
-class Tags {}
+class Tags
+{
+}
