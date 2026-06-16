@@ -4,11 +4,12 @@ namespace App\Docs\AdminApi;
 
 use OpenApi\Attributes as OA;
 
-/**
- * 後台 API 的 Tag 群組定義。
- *
- * 所有後台 Routes/ 裡用到的 tags 名稱都必須先在此宣告，
- * Swagger UI 才會顯示對應的群組說明文字。
- * 新增後台 API 群組時，在此追加一個 #[OA\Tag(...)] 即可。
- */
-class Tags {}
+#[OA\Tag(name: Tags::AUTH,  description: '後台認證相關 API')]
+#[OA\Tag(name: Tags::ADMIN, description: '後台人員管理相關 API')]
+#[OA\Tag(name: Tags::ROLE,  description: '角色管理相關 API')]
+class Tags
+{
+    const string AUTH  = '後台認證';
+    const string ADMIN = '後台人員管理';
+    const string ROLE  = '角色管理';
+}
