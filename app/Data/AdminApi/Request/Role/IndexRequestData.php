@@ -8,7 +8,8 @@ readonly class IndexRequestData
 {
     public function __construct(
         public ?string $keyword,
-    ) {}
+    ) {
+    }
 
     public static function fromRequest(IndexRequest $request): self
     {

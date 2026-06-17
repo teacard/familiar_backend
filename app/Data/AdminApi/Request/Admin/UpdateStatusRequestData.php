@@ -9,7 +9,8 @@ readonly class UpdateStatusRequestData
 {
     public function __construct(
         public Status $status,
-    ) {}
+    ) {
+    }
 
     public static function fromRequest(UpdateStatusRequest $request): self
     {

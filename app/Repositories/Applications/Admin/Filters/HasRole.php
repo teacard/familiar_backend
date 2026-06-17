@@ -13,15 +13,16 @@ class HasRole implements FilterInterface
 
     public function __construct(
         protected Id $idFilter,
-    ) {}
+    ) {
+    }
 
     public function apply(Builder $query, mixed $value): Builder
     {
         return $query->whereHas(
             'roles',
-            fn(Builder $query) => $this->applyRelatedFilters(
+            fn (Builder $query) => $this->applyRelatedFilters(
                 relatedFilters: [
-                    'id' => $this->idFilter
+                    'id' => $this->idFilter,
                 ],
                 query: $query,
                 value: $value,

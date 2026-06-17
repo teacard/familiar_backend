@@ -10,7 +10,7 @@ return [
             'email' => 'Email',
             'password' => 'Password',
             'password_confirmation' => 'Password Confirmation',
-            'permissions'          => 'Permissions',
+            'permissions' => 'Permissions',
         ],
         'api' => [],
     ],

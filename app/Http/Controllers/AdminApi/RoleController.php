@@ -22,7 +22,8 @@ class RoleController extends Controller
 {
     public function __construct(
         protected RoleService $roleService,
-    ) {}
+    ) {
+    }
 
     /** 角色管理-列表 */
     public function index(IndexRequest $request): JsonResponse
@@ -42,7 +43,7 @@ class RoleController extends Controller
         );
 
         return $this->success(
-            $roles->map(fn($role) => RoleIndexResponse::fromModel($role))->values()->toArray()
+            $roles->map(fn ($role) => RoleIndexResponse::fromModel($role))->values()->toArray()
         );
     }
 

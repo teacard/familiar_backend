@@ -10,7 +10,7 @@ return [
             'email' => '電子郵件',
             'password' => '密碼',
             'password_confirmation' => '確認密碼',
-            'permissions'          => '權限',
+            'permissions' => '權限',
         ],
         'api' => [],
     ],

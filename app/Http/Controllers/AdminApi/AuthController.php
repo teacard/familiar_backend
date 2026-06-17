@@ -13,7 +13,8 @@ class AuthController extends Controller
 {
     public function __construct(
         protected AuthService $authService,
-    ) {}
+    ) {
+    }
 
     /** 後台登入 */
     public function login(LoginRequest $request): JsonResponse

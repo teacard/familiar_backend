@@ -24,7 +24,8 @@ class AdminController extends Controller
 {
     public function __construct(
         protected AdminService $adminService,
-    ) {}
+    ) {
+    }
 
     /** 後台人員管理-列表 */
     public function index(IndexRequest $request): JsonResponse

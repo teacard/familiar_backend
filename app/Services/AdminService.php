@@ -21,7 +21,8 @@ class AdminService
     public function __construct(
         protected AdminRepository $repository,
         protected RoleService $roleService,
-    ) {}
+    ) {
+    }
 
     /** 列表（含角色 eager load） */
     public function listAdmins(IndexRequestData $data): LengthAwarePaginator
@@ -62,8 +63,8 @@ class AdminService
     public function createAdmin(StoreRequestData $data): Admin
     {
         $admin = $this->create([
-            'name'     => $data->name,
-            'email'    => $data->email,
+            'name' => $data->name,
+            'email' => $data->email,
             'password' => $data->password,
         ]);
 

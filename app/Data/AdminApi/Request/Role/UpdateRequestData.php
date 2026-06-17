@@ -8,8 +8,9 @@ readonly class UpdateRequestData
 {
     public function __construct(
         public string $name,
-        public array  $permissions,
-    ) {}
+        public array $permissions,
+    ) {
+    }
 
     public static function fromRequest(UpdateRequest $request): self
     {

@@ -10,8 +10,9 @@ readonly class StoreRequestData
         public string $name,
         public string $email,
         public string $password,
-        public int    $roleId,
-    ) {}
+        public int $roleId,
+    ) {
+    }
 
     public static function fromRequest(StoreRequest $request): self
     {

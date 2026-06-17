@@ -7,8 +7,8 @@ use App\Data\AdminApi\Request\Role\StoreRequestData;
 use App\Data\AdminApi\Request\Role\UpdateRequestData;
 use App\Exceptions\NotFoundException;
 use App\Models\Role;
-use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Applications\Role\RoleRepository;
+use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Traits\AsRepositoryProxy;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -18,20 +18,16 @@ class RoleService
 
     public function __construct(
         protected RoleRepository $repository,
-    ) {}
-
-    protected function getProxyRepository(): RepositoryInterface
-    {
-        return $this->repository;
+    ) {
     }
 
     /** 取得角色列表 */
     public function listRoles(IndexRequestData $data, string $guardName, bool $withPermissions): Collection
     {
         return $this->get([
-            'guard_name'       => $guardName,
+            'guard_name' => $guardName,
             'with_permissions' => $withPermissions,
-            'keyword'          => $data->keyword,
+            'keyword' => $data->keyword,
         ]);
     }
 
@@ -40,7 +36,7 @@ class RoleService
     {
         /** @var Role|null $role */
         $role = $this->first([
-            'id'         => $id,
+            'id' => $id,
             'guard_name' => $guardName,
         ]);
 
@@ -61,7 +57,7 @@ class RoleService
         $role = $this->create(
             [
                 'name' => $data->name,
-                'guard_name' => $guardName
+                'guard_name' => $guardName,
             ]
         );
 
@@ -80,5 +76,10 @@ class RoleService
     public function deleteRole(Role $role): void
     {
         $role->delete();
+    }
+
+    protected function getProxyRepository(): RepositoryInterface
+    {
+        return $this->repository;
     }
 }

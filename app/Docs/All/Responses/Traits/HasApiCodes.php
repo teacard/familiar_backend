@@ -12,8 +12,8 @@ trait HasApiCodes
             $description = array_reduce(
                 $apiCodeEnums,
                 static function ($description, $apiCodeEnum) {
-                    $apiCode  = $apiCodeEnum->value;
-                    $message  = trans('api-codes.' . $apiCode);
+                    $apiCode = $apiCodeEnum->value;
+                    $message = trans('api-codes.' . $apiCode);
                     $description .= "<br/><code>{$apiCode}</code>: {$message}";
 
                     return $description;

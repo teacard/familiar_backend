@@ -24,5 +24,7 @@ class AuthController
             new UnprocessableResponse(apiCodeEnums: [ApiCode::INVALID_CREDENTIALS]),
         ],
     )]
-    public function login(): void {}
+    public function login(): void
+    {
+    }
 }

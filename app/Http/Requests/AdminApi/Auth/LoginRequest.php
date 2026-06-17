@@ -9,7 +9,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ];
     }
@@ -17,7 +17,7 @@ class LoginRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'email'    => trans('admin.attributes.adminapi.email'),
+            'email' => trans('admin.attributes.adminapi.email'),
             'password' => trans('admin.attributes.adminapi.password'),
         ];
     }

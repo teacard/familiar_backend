@@ -10,8 +10,8 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => ['required', 'string', 'max:50', 'unique:roles,name'],
-            'permissions'   => ['required', 'array'],
+            'name' => ['required', 'string', 'max:50', 'unique:roles,name'],
+            'permissions' => ['required', 'array'],
             'permissions.*' => ['string', Rule::exists('permissions', 'name')],
         ];
     }
@@ -19,7 +19,7 @@ class StoreRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name'        => trans('admin.attributes.adminapi.name'),
+            'name' => trans('admin.attributes.adminapi.name'),
             'permissions' => trans('admin.attributes.adminapi.permissions'),
         ];
     }

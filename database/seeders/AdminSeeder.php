@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Permission;
 class AdminSeeder extends Seeder
 {
     public const NAME = '超級管理員';
+
     public function run(): void
     {
         $role = Role::updateOrCreate(

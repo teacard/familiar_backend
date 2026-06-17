@@ -18,14 +18,14 @@ class LoginTest extends TestCase
     {
         // GIVEN 一個 active 狀態的管理員，密碼為 secret123
         $admin = Admin::factory()->create([
-            'email'    => 'admin@example.com',
+            'email' => 'admin@example.com',
             'password' => Hash::make('secret123'),
-            'status'   => Status::ACTIVE,
+            'status' => Status::ACTIVE,
         ]);
 
         // WHEN  POST /admin-api/auth/login
         $response = $this->postJson('/admin-api/auth/login', [
-            'email'    => 'admin@example.com',
+            'email' => 'admin@example.com',
             'password' => 'secret123',
         ]);
 
@@ -41,7 +41,7 @@ class LoginTest extends TestCase
         // GIVEN 無任何管理員資料
         // WHEN  POST /admin-api/auth/login
         $response = $this->postJson('/admin-api/auth/login', [
-            'email'    => 'nobody@example.com',
+            'email' => 'nobody@example.com',
             'password' => 'secret123',
         ]);
 
@@ -55,13 +55,13 @@ class LoginTest extends TestCase
     {
         // GIVEN 一個管理員，密碼為 secret123
         Admin::factory()->create([
-            'email'    => 'admin@example.com',
+            'email' => 'admin@example.com',
             'password' => Hash::make('secret123'),
         ]);
 
         // WHEN  傳入錯誤密碼
         $response = $this->postJson('/admin-api/auth/login', [
-            'email'    => 'admin@example.com',
+            'email' => 'admin@example.com',
             'password' => 'wrong_password',
         ]);
 
@@ -75,14 +75,14 @@ class LoginTest extends TestCase
     {
         // GIVEN 一個 suspended 狀態的管理員
         Admin::factory()->create([
-            'email'    => 'admin@example.com',
+            'email' => 'admin@example.com',
             'password' => Hash::make('secret123'),
-            'status'   => Status::SUSPENDED,
+            'status' => Status::SUSPENDED,
         ]);
 
         // WHEN  以正確帳密登入
         $response = $this->postJson('/admin-api/auth/login', [
-            'email'    => 'admin@example.com',
+            'email' => 'admin@example.com',
             'password' => 'secret123',
         ]);
 
@@ -124,7 +124,7 @@ class LoginTest extends TestCase
         // GIVEN 傳入非 email 格式的字串
         // WHEN  POST /admin-api/auth/login
         $response = $this->postJson('/admin-api/auth/login', [
-            'email'    => 'not-an-email',
+            'email' => 'not-an-email',
             'password' => 'secret123',
         ]);
 

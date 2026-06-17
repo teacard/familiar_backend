@@ -12,7 +12,8 @@ class RoleShowResponse extends Data
         public string $name,
         /** @var Collection<int, PermissionResponse> */
         public Collection $permissions,
-    ) {}
+    ) {
+    }
 
     public static function fromModel(Role $role): self
     {

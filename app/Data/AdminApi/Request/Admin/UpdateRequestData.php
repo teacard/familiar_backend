@@ -8,12 +8,13 @@ use App\Http\Requests\AdminApi\Admin\UpdateRequest;
 readonly class UpdateRequestData
 {
     public function __construct(
-        public string  $name,
-        public string  $email,
+        public string $name,
+        public string $email,
         public ?string $password,
-        public int     $roleId,
-        public Status  $status,
-    ) {}
+        public int $roleId,
+        public Status $status,
+    ) {
+    }
 
     public static function fromRequest(UpdateRequest $request): self
     {

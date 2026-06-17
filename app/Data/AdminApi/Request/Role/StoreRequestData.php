@@ -8,8 +8,9 @@ readonly class StoreRequestData
 {
     public function __construct(
         public string $name,
-        public array  $permissions,
-    ) {}
+        public array $permissions,
+    ) {
+    }
 
     public static function fromRequest(StoreRequest $request): self
     {

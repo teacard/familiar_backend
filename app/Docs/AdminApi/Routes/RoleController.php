@@ -37,7 +37,9 @@ class RoleController
             new ForbiddenResponse(),
         ],
     )]
-    public function index(): void {}
+    public function index(): void
+    {
+    }
 
     #[OA\Post(
         path: '/roles',
@@ -52,7 +54,9 @@ class RoleController
             new ForbiddenResponse(),
         ],
     )]
-    public function store(): void {}
+    public function store(): void
+    {
+    }
 
     #[OA\Get(
         path: '/roles/{id}',
@@ -75,7 +79,9 @@ class RoleController
             new NotFoundResponse(),
         ],
     )]
-    public function show(): void {}
+    public function show(): void
+    {
+    }
 
     #[OA\Put(
         path: '/roles/{id}',
@@ -99,7 +105,9 @@ class RoleController
             new NotFoundResponse(),
         ],
     )]
-    public function update(): void {}
+    public function update(): void
+    {
+    }
 
     #[OA\Delete(
         path: '/roles/{id}',
@@ -122,5 +130,7 @@ class RoleController
             new NotFoundResponse(),
         ],
     )]
-    public function destroy(): void {}
+    public function destroy(): void
+    {
+    }
 }

@@ -19,7 +19,8 @@ class AuthService
 
     public function __construct(
         protected AdminRepository $repository,
-    ) {}
+    ) {
+    }
 
     /** email + 密碼驗證，回傳已認證的 Admin */
     public function login(LoginRequestData $data): Admin
@@ -33,7 +34,7 @@ class AuthService
         );
 
         throw_if(
-            condition: $admin->status !== Status::ACTIVE,
+            condition: Status::ACTIVE !== $admin->status,
             exception: NotFoundException::class,
         );
 

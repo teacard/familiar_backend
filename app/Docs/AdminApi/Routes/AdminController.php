@@ -7,12 +7,12 @@ use App\Docs\AdminApi\Requests\Admin\UpdateRequest;
 use App\Docs\AdminApi\Requests\Admin\UpdateStatusRequest;
 use App\Docs\AdminApi\ResponseContents\Admin\AdminPaginatedResponseContent;
 use App\Docs\AdminApi\ResponseContents\Admin\AdminResponseContent;
+use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
 use App\Docs\All\Responses\ForbiddenResponse;
 use App\Docs\All\Responses\NotFoundResponse;
 use App\Docs\All\Responses\OkResponse;
 use App\Docs\All\Responses\UnauthorizedResponse;
-use App\Docs\AdminApi\Tags;
 use App\Enums\Admin\Status;
 use OpenApi\Attributes as OA;
 
@@ -75,7 +75,9 @@ class AdminController
             new ForbiddenResponse(),
         ],
     )]
-    public function index(): void {}
+    public function index(): void
+    {
+    }
 
     #[OA\Post(
         path: '/admin',
@@ -90,7 +92,9 @@ class AdminController
             new ForbiddenResponse(),
         ],
     )]
-    public function store(): void {}
+    public function store(): void
+    {
+    }
 
     #[OA\Get(
         path: '/admin/{id}',
@@ -113,7 +117,9 @@ class AdminController
             new NotFoundResponse(),
         ],
     )]
-    public function show(): void {}
+    public function show(): void
+    {
+    }
 
     #[OA\Put(
         path: '/admin/{id}',
@@ -137,7 +143,9 @@ class AdminController
             new NotFoundResponse(),
         ],
     )]
-    public function update(): void {}
+    public function update(): void
+    {
+    }
 
     #[OA\Patch(
         path: '/admin/{id}/status',
@@ -161,7 +169,9 @@ class AdminController
             new NotFoundResponse(),
         ],
     )]
-    public function updateStatus(): void {}
+    public function updateStatus(): void
+    {
+    }
 
     #[OA\Delete(
         path: '/admin/{id}',
@@ -184,5 +194,7 @@ class AdminController
             new NotFoundResponse(),
         ],
     )]
-    public function destroy(): void {}
+    public function destroy(): void
+    {
+    }
 }
