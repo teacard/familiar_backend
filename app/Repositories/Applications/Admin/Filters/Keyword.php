@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Applications\Role\Filters;
+namespace App\Repositories\Applications\Admin\Filters;
 
 use App\Repositories\Contracts\FilterInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,6 +12,9 @@ class Keyword implements FilterInterface
     {
         $keyword = Str::replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $value);
 
-        return $query->where('name', 'like', "%{$keyword}%");
+        return $query->where(function (Builder $q) use ($keyword) {
+            $q->where('name', 'like', "%{$keyword}%")
+                ->orWhere('email', 'like', "%{$keyword}%");
+        });
     }
 }

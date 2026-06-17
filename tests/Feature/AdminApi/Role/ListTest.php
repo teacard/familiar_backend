@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\AdminApi\Role;
 
+use App\Enums\Auth\Guard;
 use App\Models\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
@@ -19,7 +20,7 @@ class ListTest extends TestCase
         $this->adminPermission('view_users');
         $actor = $this->adminWith('view_roles');
 
-        $editorRole = Role::create(['name' => 'editor', 'guard_name' => 'admin']);
+        $editorRole = Role::create(['name' => 'editor', 'guard_name' => Guard::ADMIN->value]);
         $editorRole->givePermissionTo('view_users');
 
         // WHEN  發送 GET /admin-api/roles
@@ -49,7 +50,7 @@ class ListTest extends TestCase
         $this->adminPermission('edit_users');
         $actor = $this->adminWith('view_roles');
 
-        $superRole = Role::create(['name' => 'super', 'guard_name' => 'admin']);
+        $superRole = Role::create(['name' => 'super', 'guard_name' => Guard::ADMIN->value]);
         $superRole->givePermissionTo(['view_users', 'edit_users']);
 
         // WHEN  發送 GET /admin-api/roles
@@ -78,7 +79,7 @@ class ListTest extends TestCase
     {
         // GIVEN 有 view_roles 權限的管理員，及一個無任何權限的角色
         $actor = $this->adminWith('view_roles');
-        Role::create(['name' => 'no_perm_role', 'guard_name' => 'admin']);
+        Role::create(['name' => 'no_perm_role', 'guard_name' => Guard::ADMIN->value]);
 
         // WHEN  發送 GET /admin-api/roles
         $response = $this->actingAs($actor, 'admin')
@@ -98,7 +99,7 @@ class ListTest extends TestCase
     {
         // GIVEN 有 view_roles 權限的管理員，同時存在一個 web guard 角色
         $actor = $this->adminWith('view_roles');
-        Role::create(['name' => 'web_role', 'guard_name' => 'web']);
+        Role::create(['name' => 'web_role', 'guard_name' => Guard::WEB->value]);
 
         // WHEN  發送 GET /admin-api/roles
         $response = $this->actingAs($actor, 'admin')
@@ -115,8 +116,8 @@ class ListTest extends TestCase
     {
         // GIVEN 有 view_roles 權限的管理員，及兩個 name 不同的角色
         $actor = $this->adminWith('view_roles');
-        Role::create(['name' => 'editor', 'guard_name' => 'admin']);
-        Role::create(['name' => 'viewer', 'guard_name' => 'admin']);
+        Role::create(['name' => 'editor', 'guard_name' => Guard::ADMIN->value]);
+        Role::create(['name' => 'viewer', 'guard_name' => Guard::ADMIN->value]);
 
         // WHEN  發送 GET /admin-api/roles?keyword=edit
         $response = $this->actingAs($actor, 'admin')
@@ -134,8 +135,8 @@ class ListTest extends TestCase
     {
         // GIVEN 有 view_roles 權限的管理員，及兩個角色
         $actor = $this->adminWith('view_roles');
-        Role::create(['name' => 'editor', 'guard_name' => 'admin']);
-        Role::create(['name' => 'viewer', 'guard_name' => 'admin']);
+        Role::create(['name' => 'editor', 'guard_name' => Guard::ADMIN->value]);
+        Role::create(['name' => 'viewer', 'guard_name' => Guard::ADMIN->value]);
 
         // WHEN  發送 GET /admin-api/roles（不帶 keyword）
         $response = $this->actingAs($actor, 'admin')
@@ -175,7 +176,7 @@ class ListTest extends TestCase
 
     private function adminPermission(string $name): Permission
     {
-        return Permission::firstOrCreate(['name' => $name, 'guard_name' => 'admin']);
+        return Permission::firstOrCreate(['name' => $name, 'guard_name' => Guard::ADMIN->value]);
     }
 
     private function adminWith(string ...$permissions): Admin
@@ -183,7 +184,7 @@ class ListTest extends TestCase
         foreach ($permissions as $p) {
             $this->adminPermission($p);
         }
-        $role = Role::create(['name' => 'actor_role', 'guard_name' => 'admin']);
+        $role = Role::create(['name' => 'actor_role', 'guard_name' => Guard::ADMIN->value]);
         $role->givePermissionTo($permissions);
         $admin = Admin::factory()->create();
         $admin->assignRole($role);
@@ -193,7 +194,7 @@ class ListTest extends TestCase
 
     private function adminWithNoPermission(): Admin
     {
-        $role = Role::create(['name' => 'empty_role', 'guard_name' => 'admin']);
+        $role = Role::create(['name' => 'empty_role', 'guard_name' => Guard::ADMIN->value]);
         $admin = Admin::factory()->create();
         $admin->assignRole($role);
 

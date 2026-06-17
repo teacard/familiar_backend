@@ -36,7 +36,9 @@ class RoleController extends Controller
         );
 
         $roles = $this->roleService->listRoles(
-            IndexRequestData::fromRequest($request)
+            data: IndexRequestData::fromRequest($request),
+            guardName: Guard::ADMIN->value,
+            withPermissions: true,
         );
 
         return $this->success(
@@ -56,7 +58,7 @@ class RoleController extends Controller
         );
 
         return $this->success(
-            RoleShowResponse::fromModel($this->roleService->findOrFail($id))
+            RoleShowResponse::fromModel($this->roleService->findOrFail($id, Guard::ADMIN->value))
         );
     }
 
@@ -72,7 +74,8 @@ class RoleController extends Controller
         );
 
         $this->roleService->createRole(
-            StoreRequestData::fromRequest($request)
+            data: StoreRequestData::fromRequest($request),
+            guardName: Guard::ADMIN->value,
         );
 
         return $this->success([]);
@@ -90,7 +93,7 @@ class RoleController extends Controller
         );
 
         $this->roleService->updateRole(
-            role: $this->roleService->findOrFail($id),
+            role: $this->roleService->findOrFail($id, Guard::ADMIN->value),
             data: UpdateRequestData::fromRequest($request),
         );
 
@@ -109,7 +112,7 @@ class RoleController extends Controller
         );
 
         $this->roleService->deleteRole(
-            $this->roleService->findOrFail($id)
+            $this->roleService->findOrFail($id, Guard::ADMIN->value)
         );
 
         return $this->success([]);
