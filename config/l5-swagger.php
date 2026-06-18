@@ -292,7 +292,7 @@ return [
          * 設定信任的代理 IP 位址，在使用 AWS Load Balancer 等反向代理時需要設定此項，
          * 確保 Swagger 正確辨識客戶端的真實 IP 與協定。
          */
-        'proxy' => false,
+        'proxy' => true,
 
         /*
          * Configs plugin allows to fetch external configs instead of passing them to SwaggerUIBundle.
