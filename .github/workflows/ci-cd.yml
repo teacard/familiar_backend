@@ -22,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -53,9 +56,17 @@ jobs:
       - name: PHP syntax check
         run: find app bootstrap config database routes -name "*.php" -print0 | xargs -0 -n1 php -l
 
-      # 程式碼風格驗證：只檢查不修改，不符合規則則失敗
-      - name: Code style (PHP CS Fixer)
-        run: ./vendor/bin/php-cs-fixer check --show-progress=none
+      # 程式碼風格：自動修正後若有變動則 commit 回分支，不再讓 PR 因風格問題卡關
+      - name: Code style (PHP CS Fixer - auto fix)
+        run: |
+          ./vendor/bin/php-cs-fixer fix --show-progress=none
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "style: auto-fix PHP CS Fixer"
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
+          fi
 
       # 測試：phpunit.xml 已設定用 SQLite in-memory，無需真實 DB
       - name: Run tests
