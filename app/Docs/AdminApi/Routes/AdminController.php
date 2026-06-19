@@ -6,7 +6,7 @@ use App\Docs\AdminApi\Requests\Admin\StoreRequest;
 use App\Docs\AdminApi\Requests\Admin\UpdateRequest;
 use App\Docs\AdminApi\Requests\Admin\UpdateStatusRequest;
 use App\Docs\AdminApi\ResponseContents\Admin\AdminPaginatedResponseContent;
-use App\Docs\AdminApi\ResponseContents\Admin\AdminResponseContent;
+use App\Docs\AdminApi\ResponseContents\Admin\AdminShowResponseContent;
 use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
 use App\Docs\All\Responses\ForbiddenResponse;
@@ -111,7 +111,7 @@ class AdminController
             ),
         ],
         responses: [
-            new OkResponse(contentRef: AdminResponseContent::class),
+            new OkResponse(contentRef: AdminShowResponseContent::class),
             new UnauthorizedResponse(),
             new ForbiddenResponse(),
             new NotFoundResponse(),

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\AdminApi\Admin;
 
+use App\Enums\Admin\Status;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -14,6 +16,7 @@ class StoreRequest extends FormRequest
             'password' => ['required', 'string', 'min:8', 'same:passwordConfirmation'],
             'passwordConfirmation' => ['required', 'string'],
             'roleId' => ['required', 'integer', 'exists:roles,id'],
+            'status' => ['required', Rule::enum(Status::class)],
         ];
     }
 
@@ -24,6 +27,7 @@ class StoreRequest extends FormRequest
             'email' => trans('admin.attributes.adminapi.email'),
             'password' => trans('admin.attributes.adminapi.password'),
             'roleId' => trans('admin.attributes.adminapi.roleId'),
+            'status' => trans('admin.attributes.adminapi.status'),
         ];
     }
 }

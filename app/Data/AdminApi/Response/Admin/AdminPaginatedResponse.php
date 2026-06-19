@@ -11,7 +11,6 @@ class AdminPaginatedResponse extends Data
     public function __construct(
         /** @var Collection<int, AdminResponse> */
         public Collection $items,
-        public int $total,
         public int $currentPage,
         public int $perPage,
         public int $lastPage,
@@ -22,7 +21,6 @@ class AdminPaginatedResponse extends Data
     {
         return new self(
             items: AdminResponse::collect($paginator->getCollection()),
-            total: $paginator->total(),
             currentPage: $paginator->currentPage(),
             perPage: $paginator->perPage(),
             lastPage: $paginator->lastPage(),

@@ -66,6 +66,7 @@ class AdminService
             'name' => $data->name,
             'email' => $data->email,
             'password' => $data->password,
+            'status' => $data->status->value,
         ]);
 
         $admin->assignRole($this->roleService->findOrFail($data->roleId, Guard::ADMIN->value));
