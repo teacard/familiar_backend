@@ -58,10 +58,13 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      *
      * 以 admin_web guard 的登入者判斷授權：須為 ACTIVE 且 is_super_admin 的 Admin。
      * 不依賴注入的預設 guard user，因 Telescope 登入走 admin_web session guard。
+     *
+     * 參數 $user 必須保留（可為 null）：預設 web guard 對此請求是 guest，
+     * 若 callback 無可為 null 的參數，Laravel Gate 會將 guest 直接判定為拒絕（403）。
      */
     protected function gate(): void
     {
-        Gate::define('viewTelescope', function () {
+        Gate::define('viewTelescope', function (mixed $user = null) {
             /** @var Admin|null $admin */
             $admin = Auth::guard(Guard::ADMIN_WEB->value)->user();
 
