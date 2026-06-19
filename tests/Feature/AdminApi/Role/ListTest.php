@@ -13,85 +13,95 @@ class ListTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** 成功取得角色列表，每筆含 id、name、permissions */
-    public function testReturnsRoleListWithPermissions(): void
+    /** 成功取得角色列表，每筆含 id、name、isDeletable，且不含 permissions */
+    public function testReturnsRoleListWithIsDeletable(): void
     {
-        // GIVEN 有 view_roles 權限的管理員，以及另一個持有 view_users 權限的 admin guard 角色
-        $this->adminPermission('view_users');
+        // GIVEN 有 view_roles 權限的管理員
         $actor = $this->adminWith('view_roles');
-
-        $editorRole = Role::create(['name' => 'editor', 'guard_name' => Guard::ADMIN->value]);
-        $editorRole->givePermissionTo('view_users');
 
         // WHEN  發送 GET /admin-api/roles
         $response = $this->actingAs($actor, 'admin')
             ->getJson('/admin-api/roles');
 
-        // THEN  回傳 200，data 含角色結構
+        // THEN  回傳 200，data 每筆含 id、name、isDeletable，且不含 permissions
         $response->assertOk()
             ->assertJsonStructure([
                 'data' => [
                     '*' => [
                         'id',
                         'name',
-                        'permissions' => [
-                            '*' => ['name', 'label'],
-                        ],
+                        'isDeletable',
                     ],
                 ],
             ]);
-    }
 
-    /** 角色持有多個 permission 時，permissions 含完整清單及 label */
-    public function testIncludesAllPermissionsWithLabel(): void
-    {
-        // GIVEN 有 view_roles 權限的管理員，及一個持有兩個權限的角色
-        $this->adminPermission('view_users');
-        $this->adminPermission('edit_users');
-        $actor = $this->adminWith('view_roles');
-
-        $superRole = Role::create(['name' => 'super', 'guard_name' => Guard::ADMIN->value]);
-        $superRole->givePermissionTo(['view_users', 'edit_users']);
-
-        // WHEN  發送 GET /admin-api/roles
-        $response = $this->actingAs($actor, 'admin')
-            ->getJson('/admin-api/roles');
-
-        // THEN  找到 super 角色，其 permissions 含兩筆，每筆有 name 與 label
-        $response->assertOk();
-        $roles = collect($response->json('data'));
-        $superEntry = $roles->firstWhere('name', 'super');
-
-        $this->assertNotNull($superEntry);
-        $this->assertCount(2, $superEntry['permissions']);
-        $permNames = collect($superEntry['permissions'])->pluck('name');
-        $this->assertContains('view_users', $permNames);
-        $this->assertContains('edit_users', $permNames);
-
-        foreach ($superEntry['permissions'] as $perm) {
-            $this->assertArrayHasKey('label', $perm);
-            $this->assertNotEmpty($perm['label']);
+        foreach ($response->json('data') as $entry) {
+            $this->assertArrayNotHasKey('permissions', $entry);
+            $this->assertIsBool($entry['isDeletable']);
         }
     }
 
-    /** 角色沒有任何 permission 時 permissions 為空陣列 */
-    public function testReturnsEmptyPermissionsForRoleWithNone(): void
+    /** 角色有 admin 帳號使用時，isDeletable 為 false */
+    public function testIsDeletableFalseWhenRoleHasAssignedAdmin(): void
     {
-        // GIVEN 有 view_roles 權限的管理員，及一個無任何權限的角色
+        // GIVEN 有 view_roles 權限的管理員，及一個被某 admin 指派的角色
         $actor = $this->adminWith('view_roles');
-        Role::create(['name' => 'no_perm_role', 'guard_name' => Guard::ADMIN->value]);
+
+        $usedRole = Role::create(['name' => 'used_role', 'guard_name' => Guard::ADMIN->value]);
+        Admin::factory()->create()->assignRole($usedRole);
 
         // WHEN  發送 GET /admin-api/roles
         $response = $this->actingAs($actor, 'admin')
             ->getJson('/admin-api/roles');
 
-        // THEN  no_perm_role 的 permissions 為空陣列
+        // THEN  used_role 的 isDeletable 為 false
         $response->assertOk();
-        $roles = collect($response->json('data'));
-        $emptyEntry = $roles->firstWhere('name', 'no_perm_role');
+        $entry = collect($response->json('data'))->firstWhere('name', 'used_role');
 
-        $this->assertNotNull($emptyEntry);
-        $this->assertSame([], $emptyEntry['permissions']);
+        $this->assertNotNull($entry);
+        $this->assertFalse($entry['isDeletable']);
+    }
+
+    /** 角色沒有任何 admin 帳號使用時，isDeletable 為 true */
+    public function testIsDeletableTrueWhenNoAdminAssigned(): void
+    {
+        // GIVEN 有 view_roles 權限的管理員，及一個無人使用的角色
+        $actor = $this->adminWith('view_roles');
+        Role::create(['name' => 'unused_role', 'guard_name' => Guard::ADMIN->value]);
+
+        // WHEN  發送 GET /admin-api/roles
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson('/admin-api/roles');
+
+        // THEN  unused_role 的 isDeletable 為 true
+        $response->assertOk();
+        $entry = collect($response->json('data'))->firstWhere('name', 'unused_role');
+
+        $this->assertNotNull($entry);
+        $this->assertTrue($entry['isDeletable']);
+    }
+
+    /** 軟刪除的 admin 不算使用該角色，isDeletable 仍為 true */
+    public function testSoftDeletedAdminDoesNotBlockDeletion(): void
+    {
+        // GIVEN 有 view_roles 權限的管理員，及一個僅被軟刪除 admin 指派的角色
+        $actor = $this->adminWith('view_roles');
+
+        $role = Role::create(['name' => 'orphan_role', 'guard_name' => Guard::ADMIN->value]);
+        $admin = Admin::factory()->create();
+        $admin->assignRole($role);
+        $admin->delete();
+
+        // WHEN  發送 GET /admin-api/roles
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson('/admin-api/roles');
+
+        // THEN  orphan_role 的 isDeletable 為 true
+        $response->assertOk();
+        $entry = collect($response->json('data'))->firstWhere('name', 'orphan_role');
+
+        $this->assertNotNull($entry);
+        $this->assertTrue($entry['isDeletable']);
     }
 
     /** 只回傳 admin guard 的角色，web guard 角色不出現 */

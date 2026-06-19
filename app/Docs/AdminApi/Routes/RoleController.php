@@ -4,8 +4,8 @@ namespace App\Docs\AdminApi\Routes;
 
 use App\Docs\AdminApi\Requests\Role\StoreRequest;
 use App\Docs\AdminApi\Requests\Role\UpdateRequest;
+use App\Docs\AdminApi\ResponseContents\Role\RoleIndexResponseContent;
 use App\Docs\AdminApi\ResponseContents\Role\RoleShowResponseContent;
-use App\Docs\AdminApi\ResponseContents\Role\RoleWithPermissionsResponseContent;
 use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
 use App\Docs\All\Responses\ForbiddenResponse;
@@ -32,14 +32,12 @@ class RoleController
             ),
         ],
         responses: [
-            new OkResponse(contentItemsRef: RoleWithPermissionsResponseContent::class),
-            new UnauthorizedResponse(),
-            new ForbiddenResponse(),
+            new OkResponse(contentItemsRef: RoleIndexResponseContent::class),
+            new UnauthorizedResponse,
+            new ForbiddenResponse,
         ],
     )]
-    public function index(): void
-    {
-    }
+    public function index(): void {}
 
     #[OA\Post(
         path: '/roles',
@@ -50,13 +48,11 @@ class RoleController
         requestBody: new JsonContentRequestBody(contentRef: StoreRequest::class),
         responses: [
             new OkResponse(withoutContent: true),
-            new UnauthorizedResponse(),
-            new ForbiddenResponse(),
+            new UnauthorizedResponse,
+            new ForbiddenResponse,
         ],
     )]
-    public function store(): void
-    {
-    }
+    public function store(): void {}
 
     #[OA\Get(
         path: '/roles/{id}',
@@ -74,14 +70,12 @@ class RoleController
         ],
         responses: [
             new OkResponse(contentRef: RoleShowResponseContent::class),
-            new UnauthorizedResponse(),
-            new ForbiddenResponse(),
-            new NotFoundResponse(),
+            new UnauthorizedResponse,
+            new ForbiddenResponse,
+            new NotFoundResponse,
         ],
     )]
-    public function show(): void
-    {
-    }
+    public function show(): void {}
 
     #[OA\Put(
         path: '/roles/{id}',
@@ -100,14 +94,12 @@ class RoleController
         requestBody: new JsonContentRequestBody(contentRef: UpdateRequest::class),
         responses: [
             new OkResponse(withoutContent: true),
-            new UnauthorizedResponse(),
-            new ForbiddenResponse(),
-            new NotFoundResponse(),
+            new UnauthorizedResponse,
+            new ForbiddenResponse,
+            new NotFoundResponse,
         ],
     )]
-    public function update(): void
-    {
-    }
+    public function update(): void {}
 
     #[OA\Delete(
         path: '/roles/{id}',
@@ -125,12 +117,10 @@ class RoleController
         ],
         responses: [
             new OkResponse(withoutContent: true),
-            new UnauthorizedResponse(),
-            new ForbiddenResponse(),
-            new NotFoundResponse(),
+            new UnauthorizedResponse,
+            new ForbiddenResponse,
+            new NotFoundResponse,
         ],
     )]
-    public function destroy(): void
-    {
-    }
+    public function destroy(): void {}
 }

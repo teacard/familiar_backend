@@ -18,17 +18,15 @@ class RoleService
 
     public function __construct(
         protected RoleRepository $repository,
-    ) {
-    }
+    ) {}
 
-    /** 取得角色列表 */
-    public function listRoles(IndexRequestData $data, string $guardName, bool $withPermissions): Collection
+    /** 取得角色列表（含是否有 admin 使用該角色，供前端判斷可否刪除） */
+    public function listRoles(IndexRequestData $data, string $guardName): Collection
     {
         return $this->get([
             'guard_name' => $guardName,
-            'with_permissions' => $withPermissions,
             'keyword' => $data->keyword,
-        ]);
+        ])->load('admins');
     }
 
     /** 依 id 查詢角色，找不到拋 404 */

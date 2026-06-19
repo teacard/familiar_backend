@@ -22,8 +22,7 @@ class RoleController extends Controller
 {
     public function __construct(
         protected RoleService $roleService,
-    ) {
-    }
+    ) {}
 
     /** 角色管理-列表 */
     public function index(IndexRequest $request): JsonResponse
@@ -39,7 +38,6 @@ class RoleController extends Controller
         $roles = $this->roleService->listRoles(
             data: IndexRequestData::fromRequest($request),
             guardName: Guard::ADMIN->value,
-            withPermissions: true,
         );
 
         return $this->success(
