@@ -12,6 +12,8 @@ use App\Docs\All\Responses\ForbiddenResponse;
 use App\Docs\All\Responses\NotFoundResponse;
 use App\Docs\All\Responses\OkResponse;
 use App\Docs\All\Responses\UnauthorizedResponse;
+use App\Docs\All\Responses\UnprocessableResponse;
+use App\Enums\ApiCode;
 use OpenApi\Attributes as OA;
 
 class RoleController
@@ -120,6 +122,7 @@ class RoleController
             new UnauthorizedResponse,
             new ForbiddenResponse,
             new NotFoundResponse,
+            new UnprocessableResponse(apiCodeEnums: [ApiCode::ROLE_IN_USE]),
         ],
     )]
     public function destroy(): void {}

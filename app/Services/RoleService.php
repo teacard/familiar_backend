@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Data\AdminApi\Request\Role\IndexRequestData;
 use App\Data\AdminApi\Request\Role\StoreRequestData;
 use App\Data\AdminApi\Request\Role\UpdateRequestData;
+use App\Enums\ApiCode;
 use App\Exceptions\NotFoundException;
+use App\Exceptions\UnprocessableException;
 use App\Models\Role;
 use App\Repositories\Applications\Role\RoleRepository;
 use App\Repositories\Contracts\RepositoryInterface;
@@ -70,9 +72,17 @@ class RoleService
         $role->syncPermissions($data->permissions);
     }
 
-    /** 刪除角色 */
+    /** 刪除角色（仍有 admin 帳號使用時拋 422，不可刪除） */
     public function deleteRole(Role $role): void
     {
+        throw_if(
+            condition: $role->admins()->exists(),
+            exception: new UnprocessableException(
+                trans('api-codes.' . ApiCode::ROLE_IN_USE->value),
+                ApiCode::ROLE_IN_USE,
+            ),
+        );
+
         $role->delete();
     }
 

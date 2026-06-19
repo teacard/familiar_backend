@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Auth;
+namespace App\Enums;
 
 enum ApiCode: string
 {
@@ -10,4 +10,6 @@ enum ApiCode: string
     case TOO_MANY_LOGIN_ATTEMPTS = 'TOO_MANY_LOGIN_ATTEMPTS';
     /** 無權存取 Telescope */
     case TELESCOPE_ACCESS_FORBIDDEN = 'TELESCOPE_ACCESS_FORBIDDEN';
+    /** 角色已被 admin 帳號使用，無法刪除 */
+    case ROLE_IN_USE = 'ROLE_IN_USE';
 }

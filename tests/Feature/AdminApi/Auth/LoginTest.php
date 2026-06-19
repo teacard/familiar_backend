@@ -3,7 +3,7 @@
 namespace Tests\Feature\AdminApi\Auth;
 
 use App\Enums\Admin\Status;
-use App\Enums\Auth\ApiCode;
+use App\Enums\ApiCode;
 use App\Models\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
