@@ -10,6 +10,7 @@
         "darkaonline/l5-swagger": "^11.1",
         "laravel/framework": "^13.8",
         "laravel/sanctum": "^4.3",
+        "laravel/telescope": "^5.20",
         "laravel/tinker": "^3.0",
         "spatie/laravel-data": "^4.23",
         "spatie/laravel-permission": "^8.0"
