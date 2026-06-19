@@ -46,6 +46,12 @@ return [
             'driver' => 'sanctum',
             'provider' => 'admins',
         ],
+
+        // Telescope 後台 web 登入專用（session），與 sanctum 'admin' guard 並存
+        'admin_web' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
     ],
 
     /*

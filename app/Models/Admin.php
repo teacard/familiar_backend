@@ -19,7 +19,7 @@ class Admin extends Authenticatable
 
     protected string $guard_name = 'admin';
 
-    protected $fillable = ['name', 'email', 'password', 'status'];
+    protected $fillable = ['name', 'email', 'password', 'status', 'is_super_admin'];
 
     protected $hidden = ['password'];
 
@@ -29,6 +29,7 @@ class Admin extends Authenticatable
             'password' => 'hashed',
             'status' => Status::class,
             'last_login_date' => 'date',
+            'is_super_admin' => 'boolean',
         ];
     }
 

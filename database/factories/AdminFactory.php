@@ -21,6 +21,15 @@ class AdminFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make('password'),
             'status' => Status::ACTIVE,
+            'is_super_admin' => false,
         ];
+    }
+
+    /** 超級管理員（可存取 Telescope） */
+    public function superAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_super_admin' => true,
+        ]);
     }
 }

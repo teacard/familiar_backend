@@ -29,6 +29,7 @@ class AdminSeeder extends Seeder
                 'name' => self::NAME,
                 'password' => config('admin.seed_password'),
                 'status' => Status::ACTIVE,
+                'is_super_admin' => true,
             ]
         );
 
