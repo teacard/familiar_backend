@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\AdminApi\Role;
 
-use App\Enums\Auth\Guard;
 use App\Enums\ApiCode;
+use App\Enums\Auth\Guard;
 use App\Models\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;

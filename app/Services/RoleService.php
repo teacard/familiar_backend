@@ -20,7 +20,8 @@ class RoleService
 
     public function __construct(
         protected RoleRepository $repository,
-    ) {}
+    ) {
+    }
 
     /** 取得角色列表（含是否有 admin 使用該角色，供前端判斷可否刪除） */
     public function listRoles(IndexRequestData $data, string $guardName): Collection

@@ -11,7 +11,8 @@ class RoleIndexResponse extends Data
         public int $id,
         public string $name,
         public bool $isDeletable,
-    ) {}
+    ) {
+    }
 
     public static function fromModel(Role $role): self
     {

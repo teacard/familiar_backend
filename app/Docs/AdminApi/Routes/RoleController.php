@@ -35,11 +35,13 @@ class RoleController
         ],
         responses: [
             new OkResponse(contentItemsRef: RoleIndexResponseContent::class),
-            new UnauthorizedResponse,
-            new ForbiddenResponse,
+            new UnauthorizedResponse(),
+            new ForbiddenResponse(),
         ],
     )]
-    public function index(): void {}
+    public function index(): void
+    {
+    }
 
     #[OA\Post(
         path: '/roles',
@@ -50,11 +52,13 @@ class RoleController
         requestBody: new JsonContentRequestBody(contentRef: StoreRequest::class),
         responses: [
             new OkResponse(withoutContent: true),
-            new UnauthorizedResponse,
-            new ForbiddenResponse,
+            new UnauthorizedResponse(),
+            new ForbiddenResponse(),
         ],
     )]
-    public function store(): void {}
+    public function store(): void
+    {
+    }
 
     #[OA\Get(
         path: '/roles/{id}',
@@ -72,12 +76,14 @@ class RoleController
         ],
         responses: [
             new OkResponse(contentRef: RoleShowResponseContent::class),
-            new UnauthorizedResponse,
-            new ForbiddenResponse,
-            new NotFoundResponse,
+            new UnauthorizedResponse(),
+            new ForbiddenResponse(),
+            new NotFoundResponse(),
         ],
     )]
-    public function show(): void {}
+    public function show(): void
+    {
+    }
 
     #[OA\Put(
         path: '/roles/{id}',
@@ -96,12 +102,14 @@ class RoleController
         requestBody: new JsonContentRequestBody(contentRef: UpdateRequest::class),
         responses: [
             new OkResponse(withoutContent: true),
-            new UnauthorizedResponse,
-            new ForbiddenResponse,
-            new NotFoundResponse,
+            new UnauthorizedResponse(),
+            new ForbiddenResponse(),
+            new NotFoundResponse(),
         ],
     )]
-    public function update(): void {}
+    public function update(): void
+    {
+    }
 
     #[OA\Delete(
         path: '/roles/{id}',
@@ -119,11 +127,13 @@ class RoleController
         ],
         responses: [
             new OkResponse(withoutContent: true),
-            new UnauthorizedResponse,
-            new ForbiddenResponse,
-            new NotFoundResponse,
+            new UnauthorizedResponse(),
+            new ForbiddenResponse(),
+            new NotFoundResponse(),
             new UnprocessableResponse(apiCodeEnums: [ApiCode::ROLE_IN_USE]),
         ],
     )]
-    public function destroy(): void {}
+    public function destroy(): void
+    {
+    }
 }
