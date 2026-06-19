@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\User;
+use App\Enums\Admin\Status;
+use App\Enums\Auth\Guard;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Telescope;
@@ -19,10 +22,11 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         $this->hideSensitiveRequestDetails();
 
-        $isLocal = $this->app->environment('local');
+        // local 與測試站（develop）記錄全部；其他環境僅記錄錯誤/失敗/排程/監控標籤
+        $recordAll = $this->app->environment(['local', 'develop']);
 
-        Telescope::filter(function (IncomingEntry $entry) use ($isLocal) {
-            return $isLocal
+        Telescope::filter(function (IncomingEntry $entry) use ($recordAll) {
+            return $recordAll
                    || $entry->isReportableException()
                    || $entry->isFailedRequest()
                    || $entry->isFailedJob()
@@ -52,13 +56,18 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     /**
      * Register the Telescope gate.
      *
-     * This gate determines who can access Telescope in non-local environments.
+     * 以 admin_web guard 的登入者判斷授權：須為 ACTIVE 且 is_super_admin 的 Admin。
+     * 不依賴注入的預設 guard user，因 Telescope 登入走 admin_web session guard。
      */
     protected function gate(): void
     {
-        Gate::define('viewTelescope', function (User $user) {
-            return in_array($user->email, [
-            ]);
+        Gate::define('viewTelescope', function () {
+            /** @var Admin|null $admin */
+            $admin = Auth::guard(Guard::ADMIN_WEB->value)->user();
+
+            return $admin instanceof Admin
+                && Status::ACTIVE === $admin->status
+                && true === $admin->is_super_admin;
         });
     }
 }

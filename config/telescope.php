@@ -93,6 +93,7 @@ return [
 
     'middleware' => [
         'web',
+        App\Http\Middleware\EnsureTelescopeSuperAdmin::class,
         Authorize::class,
     ],
 
