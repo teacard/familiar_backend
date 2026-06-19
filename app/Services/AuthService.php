@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Data\AdminApi\Request\Auth\LoginRequestData;
 use App\Enums\Admin\Status;
-use App\Enums\Auth\ApiCode;
+use App\Enums\ApiCode;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\UnprocessableException;
 use App\Models\Admin;

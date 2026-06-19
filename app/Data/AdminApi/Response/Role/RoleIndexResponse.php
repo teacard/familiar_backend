@@ -3,7 +3,6 @@
 namespace App\Data\AdminApi\Response\Role;
 
 use App\Models\Role;
-use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
 class RoleIndexResponse extends Data
@@ -11,8 +10,7 @@ class RoleIndexResponse extends Data
     public function __construct(
         public int $id,
         public string $name,
-        /** @var Collection<int, PermissionResponse> */
-        public Collection $permissions,
+        public bool $isDeletable,
     ) {
     }
 
@@ -21,7 +19,8 @@ class RoleIndexResponse extends Data
         return new self(
             id: $role->id,
             name: $role->name,
-            permissions: PermissionResponse::collect($role->permissions),
+            // 沒有任何 admin 帳號使用此角色時才可刪除
+            isDeletable: $role->admins->isEmpty(),
         );
     }
 }

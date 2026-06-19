@@ -8,7 +8,7 @@ use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
 use App\Docs\All\Responses\OkResponse;
 use App\Docs\All\Responses\UnprocessableResponse;
-use App\Enums\Auth\ApiCode;
+use App\Enums\ApiCode;
 use OpenApi\Attributes as OA;
 
 class AuthController

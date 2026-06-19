@@ -3,7 +3,7 @@
 namespace App\Http\Requests\TelescopeAuth;
 
 use App\Enums\Admin\Status;
-use App\Enums\Auth\ApiCode;
+use App\Enums\ApiCode;
 use App\Enums\Auth\Guard;
 use App\Models\Admin;
 use Illuminate\Foundation\Http\FormRequest;

@@ -39,7 +39,6 @@ class RoleController extends Controller
         $roles = $this->roleService->listRoles(
             data: IndexRequestData::fromRequest($request),
             guardName: Guard::ADMIN->value,
-            withPermissions: true,
         );
 
         return $this->success(
