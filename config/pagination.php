@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'per_page' => [
+    'perPage' => [
         'default' => 10,
         'options' => [10, 25, 50],
     ],
@@ -9,7 +9,7 @@ return [
         'default' => 1,
     ],
     'request' => [
-        'per_page' => ['nullable', 'integer', 'in:10,25,50'],
+        'perPage' => ['nullable', 'integer', 'in:10,25,50'],
         'page' => ['nullable', 'integer', 'min:1'],
     ],
 ];

@@ -15,8 +15,10 @@ class AdminSeeder extends Seeder
 
     public function run(): void
     {
+        // 以 is_system 作為系統角色的穩定識別，name 可後續被修改而不影響同步
         $role = Role::updateOrCreate(
-            ['name' => self::NAME, 'guard_name' => Guard::ADMIN->value],
+            ['is_system' => true, 'guard_name' => Guard::ADMIN->value],
+            ['name' => self::NAME],
         );
 
         $role->syncPermissions(
@@ -33,6 +35,6 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        $admin->syncRoles(self::NAME);
+        $admin->syncRoles($role);
     }
 }

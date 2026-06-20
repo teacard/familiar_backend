@@ -55,7 +55,7 @@ class AdminController
                 schema: new OA\Schema(type: 'integer', nullable: true, example: 1),
             ),
             new OA\Parameter(
-                name: 'per_page',
+                name: 'perPage',
                 in: 'query',
                 required: false,
                 description: '分頁筆數',

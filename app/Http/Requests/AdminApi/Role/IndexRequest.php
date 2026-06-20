@@ -10,13 +10,13 @@ class IndexRequest extends FormRequest
     {
         return [
             'keyword' => ['nullable', 'string', 'max:50'],
-        ];
+        ] + config('pagination.request');
     }
 
     public function attributes(): array
     {
         return [
             'keyword' => trans('admin.attributes.adminapi.keyword'),
-        ];
+        ] + trans('pagination.attributes');
     }
 }

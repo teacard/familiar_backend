@@ -70,6 +70,24 @@ class DestroyTest extends TestCase
         $response->assertNotFound();
     }
 
+    /** 刪除超級管理員回傳 404（受屏蔽，不可刪除） */
+    public function testReturns404ForSuperAdmin(): void
+    {
+        // GIVEN 有 delete_users 權限的管理員，及一筆超級管理員
+        $actor = $this->adminWith('delete_users');
+        $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
+        $target = Admin::factory()->superAdmin()->create();
+        $target->assignRole($staffRole);
+
+        // WHEN  發送 DELETE /admin-api/admin/{id}
+        $response = $this->actingAs($actor, 'admin')
+            ->deleteJson("/admin-api/admin/{$target->id}");
+
+        // THEN  回傳 404，且資料未被刪除
+        $response->assertNotFound();
+        $this->assertDatabaseHas('admins', ['id' => $target->id, 'deleted_at' => null]);
+    }
+
     /** 缺少 delete_users 權限時回傳 403 */
     public function testReturns403WhenMissingPermission(): void
     {

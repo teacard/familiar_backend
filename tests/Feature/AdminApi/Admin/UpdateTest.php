@@ -158,6 +158,28 @@ class UpdateTest extends TestCase
         $response->assertNotFound();
     }
 
+    /** 更新超級管理員回傳 404（受屏蔽，不可編輯） */
+    public function testReturns404ForSuperAdmin(): void
+    {
+        // GIVEN 有 edit_users 權限的管理員，及一筆超級管理員
+        $actor = $this->adminWith('edit_users');
+        $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
+        $target = Admin::factory()->superAdmin()->create();
+        $target->assignRole($staffRole);
+
+        // WHEN  發送 PUT /admin-api/admin/{id}
+        $response = $this->actingAs($actor, 'admin')
+            ->putJson("/admin-api/admin/{$target->id}", [
+                'name' => '新名字',
+                'email' => 'new@admin.com',
+                'roleId' => $staffRole->id,
+                'status' => 'active',
+            ]);
+
+        // THEN  回傳 404
+        $response->assertNotFound();
+    }
+
     /** 缺少 edit_users 權限時回傳 403 */
     public function testReturns403WhenMissingPermission(): void
     {

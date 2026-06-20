@@ -25,4 +25,11 @@ class Role extends SpatieRole
             config('permission.column_names.model_morph_key'),  // 樞紐表上指向模型的鍵（預設 model_id）
         );
     }
+
+    protected function casts(): array
+    {
+        return array_merge(parent::casts(), [
+            'is_system' => 'boolean',
+        ]);
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\AdminApi;
 use App\Data\AdminApi\Request\Role\IndexRequestData;
 use App\Data\AdminApi\Request\Role\StoreRequestData;
 use App\Data\AdminApi\Request\Role\UpdateRequestData;
-use App\Data\AdminApi\Response\Role\RoleIndexResponse;
+use App\Data\AdminApi\Response\Role\RolePaginatedResponse;
 use App\Data\AdminApi\Response\Role\RoleShowResponse;
 use App\Enums\Auth\Guard;
 use App\Enums\Permission\Name;
@@ -36,13 +36,13 @@ class RoleController extends Controller
             exception: ForbiddenException::class
         );
 
-        $roles = $this->roleService->listRoles(
+        $paginator = $this->roleService->listRoles(
             data: IndexRequestData::fromRequest($request),
             guardName: Guard::ADMIN->value,
         );
 
         return $this->success(
-            $roles->map(fn ($role) => RoleIndexResponse::fromModel($role))->values()->toArray()
+            RolePaginatedResponse::fromPaginator($paginator)
         );
     }
 

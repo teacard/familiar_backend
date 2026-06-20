@@ -36,6 +36,7 @@ class AdminService
                 'hasRole' => is_null($data->roleId) ? null : [
                     'id' => $data->roleId,
                 ],
+                'isSuperAdmin' => false,
             ],
         );
 
@@ -44,10 +45,14 @@ class AdminService
         return $paginator;
     }
 
-    /** 單筆查詢（含角色 eager load，找不到拋 404） */
+    /** 單筆查詢（排除超級管理員，含角色 eager load，找不到拋 404） */
     public function findOrFail(int $id): Admin
     {
-        $admin = $this->findById($id);
+        /** @var Admin|null $admin */
+        $admin = $this->first([
+            'id' => $id,
+            'isSuperAdmin' => false,
+        ]);
 
         throw_unless(
             condition: $admin,

@@ -22,7 +22,7 @@ readonly class IndexRequestData
             keyword: $request->keyword,
             status: is_null($request->status) ? null : Status::from($request->status),
             roleId: is_null($request->roleId) ? null : (int)$request->roleId,
-            perPage: (int)($request->per_page ?? config('pagination.per_page.default')),
+            perPage: (int)($request->perPage ?? config('pagination.perPage.default')),
             page: (int)($request->page ?? config('pagination.page.default')),
         );
     }
