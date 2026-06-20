@@ -11,21 +11,21 @@ use OpenApi\Attributes as OA;
 )]
 class UpdateRequest
 {
-    #[OA\Property(description: '名稱', example: '王小明')]
+    #[OA\Property(description: '名稱（不可重複，排除自身）', maxLength: 15, example: '王小明')]
     public string $name;
 
-    #[OA\Property(format: 'email', description: '電子郵件', example: 'admin@example.com')]
+    #[OA\Property(format: 'email', description: '電子郵件（不可重複，排除自身）', example: 'admin@example.com')]
     public string $email;
 
-    #[OA\Property(description: '密碼', minLength: 8, example: 'P@ssw0rd')]
-    public string $password;
+    #[OA\Property(description: '密碼（不修改則免填，須與確認密碼相同）', minLength: 8, nullable: true, example: 'P@ssw0rd')]
+    public ?string $password;
 
-    #[OA\Property(description: '確認密碼', minLength: 8, example: 'P@ssw0rd')]
-    public string $passwordConfirmation;
+    #[OA\Property(description: '確認密碼（須與密碼相同）', minLength: 8, nullable: true, example: 'P@ssw0rd')]
+    public ?string $passwordConfirmation;
 
-    #[OA\Property(description: '角色 ID', example: 1)]
+    #[OA\Property(description: '角色 ID（須為存在的角色）', example: 1)]
     public int $roleId;
 
-    #[OA\Property(description: '狀態', enum: [StatusEnum::class], example: StatusEnum::ACTIVE->value)]
+    #[OA\Property(description: '帳號狀態', enum: [StatusEnum::class], example: StatusEnum::ACTIVE->value)]
     public string $status;
 }

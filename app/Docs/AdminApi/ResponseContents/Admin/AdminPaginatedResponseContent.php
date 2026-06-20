@@ -10,9 +10,6 @@ class AdminPaginatedResponseContent
     #[OA\Property(items: new OA\Items(ref: AdminResponseContent::class))]
     public array $items;
 
-    #[OA\Property(description: '總筆數', example: 100)]
-    public int $total;
-
     #[OA\Property(description: '當前頁碼', example: 1)]
     public int $currentPage;
 

@@ -25,17 +25,18 @@ class ListTest extends TestCase
         $response = $this->actingAs($actor, 'admin')
             ->getJson('/admin-api/admin');
 
-        // THEN  回傳 200 並含分頁結構
+        // THEN  回傳 200 並含分頁結構（不含 total）
         $response->assertOk()
             ->assertJsonStructure([
                 'data' => [
                     'items' => [['id', 'name', 'email', 'role', 'status', 'lastLoginDate']],
-                    'total',
                     'currentPage',
                     'perPage',
                     'lastPage',
                 ],
             ]);
+
+        $this->assertArrayNotHasKey('total', $response->json('data'));
     }
 
     /** 關鍵字篩選只回傳 name 或 email 含關鍵字的後台人員 */
@@ -134,7 +135,7 @@ class ListTest extends TestCase
         $this->assertSame($target->id, $items[0]['id']);
     }
 
-    /** per_page=25 時每頁最多 25 筆 */
+    /** perPage=25 時每頁最多 25 筆 */
     public function testRespectsPerPage(): void
     {
         // GIVEN 有 view_users 權限的管理員，及 30 筆後台人員
@@ -142,32 +143,32 @@ class ListTest extends TestCase
         $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
         Admin::factory()->count(30)->create()->each(fn ($a) => $a->assignRole($staffRole));
 
-        // WHEN  帶 per_page=25
+        // WHEN  帶 perPage=25
         $response = $this->actingAs($actor, 'admin')
-            ->getJson('/admin-api/admin?per_page=25');
+            ->getJson('/admin-api/admin?perPage=25');
 
-        // THEN  per_page 為 25
+        // THEN  perPage 為 25
         $response->assertOk()
             ->assertJsonPath('data.perPage', 25);
         $this->assertCount(25, $response->json('data.items'));
     }
 
-    /** per_page 傳入不合法值時回傳 422，errors.per_page 含錯誤訊息 */
+    /** perPage 傳入不合法值時回傳 422，errors.perPage 含錯誤訊息 */
     public function testRejectsInvalidPerPage(): void
     {
         // GIVEN 有 view_users 權限的管理員
         $actor = $this->adminWith('view_users');
 
-        // WHEN  傳入 per_page=100
+        // WHEN  傳入 perPage=100
         $response = $this->actingAs($actor, 'admin')
-            ->getJson('/admin-api/admin?per_page=100');
+            ->getJson('/admin-api/admin?perPage=100');
 
-        // THEN  回傳 422，errors.per_page 包含驗證失敗訊息
+        // THEN  回傳 422，errors.perPage 包含驗證失敗訊息
         $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['per_page']);
+            ->assertJsonValidationErrors(['perPage']);
     }
 
-    /** 無符合篩選條件時回傳空 items 與 total=0 */
+    /** 無符合篩選條件時回傳空 items */
     public function testReturnsEmptyWhenNoMatch(): void
     {
         // GIVEN 有 view_users 權限的管理員，無其他後台人員
@@ -177,10 +178,28 @@ class ListTest extends TestCase
         $response = $this->actingAs($actor, 'admin')
             ->getJson('/admin-api/admin?keyword=ZZZNOMATCH');
 
-        // THEN  回傳 200，items 為空，total=0
+        // THEN  回傳 200，items 為空
         $response->assertOk()
-            ->assertJsonPath('data.total', 0)
             ->assertJsonPath('data.items', []);
+    }
+
+    /** 超級管理員不出現在列表 */
+    public function testExcludesSuperAdmin(): void
+    {
+        // GIVEN 有 view_users 權限的管理員，及一筆超級管理員
+        $actor = $this->adminWith('view_users');
+        $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
+        $superAdmin = Admin::factory()->superAdmin()->create();
+        $superAdmin->assignRole($staffRole);
+
+        // WHEN  發送 GET /admin-api/admin
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson('/admin-api/admin');
+
+        // THEN  回傳 200，items 不含該超級管理員
+        $response->assertOk();
+        $ids = collect($response->json('data.items'))->pluck('id');
+        $this->assertNotContains($superAdmin->id, $ids);
     }
 
     /** 未認證請求回傳 401 */

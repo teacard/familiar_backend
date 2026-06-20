@@ -2,7 +2,7 @@
 
 return [
     'attributes' => [
-        'per_page' => 'Per Page',
+        'perPage' => 'Per Page',
         'page' => 'Page',
     ],
 ];

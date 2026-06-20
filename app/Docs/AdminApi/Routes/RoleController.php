@@ -4,7 +4,7 @@ namespace App\Docs\AdminApi\Routes;
 
 use App\Docs\AdminApi\Requests\Role\StoreRequest;
 use App\Docs\AdminApi\Requests\Role\UpdateRequest;
-use App\Docs\AdminApi\ResponseContents\Role\RoleIndexResponseContent;
+use App\Docs\AdminApi\ResponseContents\Role\RolePaginatedResponseContent;
 use App\Docs\AdminApi\ResponseContents\Role\RoleShowResponseContent;
 use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
@@ -32,9 +32,23 @@ class RoleController
                 description: '關鍵字（模糊搜尋角色名稱）',
                 schema: new OA\Schema(type: 'string', maxLength: 50, nullable: true, example: '管理員'),
             ),
+            new OA\Parameter(
+                name: 'perPage',
+                in: 'query',
+                required: false,
+                description: '分頁筆數',
+                schema: new OA\Schema(type: 'integer', nullable: true, enum: [10, 25, 50], example: 10),
+            ),
+            new OA\Parameter(
+                name: 'page',
+                in: 'query',
+                required: false,
+                description: '頁數',
+                schema: new OA\Schema(type: 'integer', nullable: true, minimum: 1, example: 1),
+            ),
         ],
         responses: [
-            new OkResponse(contentItemsRef: RoleIndexResponseContent::class),
+            new OkResponse(contentRef: RolePaginatedResponseContent::class),
             new UnauthorizedResponse(),
             new ForbiddenResponse(),
         ],

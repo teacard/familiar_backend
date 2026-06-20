@@ -12,14 +12,14 @@ class StoreTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** 合法資料可成功建立後台人員，回傳空陣列，DB 狀態固定為 active */
+    /** 合法資料可成功建立後台人員，回傳空陣列，狀態依請求帶入 */
     public function testCreatesAdmin(): void
     {
         // GIVEN 有 create_users 權限的管理員，以及一個現有的 editor 角色
         $actor = $this->adminWith('create_users');
         $editorRole = Role::create(['name' => 'editor', 'guard_name' => 'admin']);
 
-        // WHEN  送出合法建立請求
+        // WHEN  送出合法建立請求（狀態為 active）
         $response = $this->actingAs($actor, 'admin')
             ->postJson('/admin-api/admin', [
                 'name' => '張三',
@@ -27,12 +27,82 @@ class StoreTest extends TestCase
                 'password' => 'password123',
                 'passwordConfirmation' => 'password123',
                 'roleId' => $editorRole->id,
+                'status' => 'active',
             ]);
 
-        // THEN  回傳 200，data 為空陣列，後台人員已建立（status 固定 active）
+        // THEN  回傳 200，data 為空陣列，後台人員已建立且狀態為 active
         $response->assertOk()
             ->assertJsonPath('data', []);
         $this->assertDatabaseHas('admins', ['email' => 'zhang@admin.com', 'status' => 'active']);
+    }
+
+    /** 建立時依請求帶入的狀態寫入（suspended） */
+    public function testCreatesAdminWithSuspendedStatus(): void
+    {
+        // GIVEN 有 create_users 權限的管理員，以及一個現有的 editor 角色
+        $actor = $this->adminWith('create_users');
+        $editorRole = Role::create(['name' => 'editor', 'guard_name' => 'admin']);
+
+        // WHEN  送出狀態為 suspended 的建立請求
+        $response = $this->actingAs($actor, 'admin')
+            ->postJson('/admin-api/admin', [
+                'name' => '李四',
+                'email' => 'li@admin.com',
+                'password' => 'password123',
+                'passwordConfirmation' => 'password123',
+                'roleId' => $editorRole->id,
+                'status' => 'suspended',
+            ]);
+
+        // THEN  回傳 200，後台人員已建立且狀態為 suspended
+        $response->assertOk()
+            ->assertJsonPath('data', []);
+        $this->assertDatabaseHas('admins', ['email' => 'li@admin.com', 'status' => 'suspended']);
+    }
+
+    /** 未提供 status 時回傳 422，errors.status 含錯誤訊息（status 為必填） */
+    public function testRejectsWhenStatusNotProvided(): void
+    {
+        // GIVEN 有 create_users 權限的管理員，及一個現有角色
+        $actor = $this->adminWith('create_users');
+        $editorRole = Role::create(['name' => 'editor', 'guard_name' => 'admin']);
+
+        // WHEN  body 中不包含 status 欄位
+        $response = $this->actingAs($actor, 'admin')
+            ->postJson('/admin-api/admin', [
+                'name' => '張三',
+                'email' => 'test@admin.com',
+                'password' => 'password123',
+                'passwordConfirmation' => 'password123',
+                'roleId' => $editorRole->id,
+            ]);
+
+        // THEN  回傳 422，errors.status 包含驗證失敗訊息
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['status']);
+    }
+
+    /** status 不在 enum 範圍時回傳 422，errors.status 含錯誤訊息 */
+    public function testRejectsInvalidStatus(): void
+    {
+        // GIVEN 有 create_users 權限的管理員，及一個現有角色
+        $actor = $this->adminWith('create_users');
+        $editorRole = Role::create(['name' => 'editor', 'guard_name' => 'admin']);
+
+        // WHEN  status 傳入不合法的值
+        $response = $this->actingAs($actor, 'admin')
+            ->postJson('/admin-api/admin', [
+                'name' => '張三',
+                'email' => 'test@admin.com',
+                'password' => 'password123',
+                'passwordConfirmation' => 'password123',
+                'roleId' => $editorRole->id,
+                'status' => 'unknown',
+            ]);
+
+        // THEN  回傳 422，errors.status 包含驗證失敗訊息
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['status']);
     }
 
     /** name 超過 15 字元時回傳 422，errors.name 含錯誤訊息 */
@@ -218,7 +288,7 @@ class StoreTest extends TestCase
         // GIVEN 有 role 但無任何 permission 的管理員
         $actor = $this->adminWithNoPermission();
 
-        // WHEN  發送 POST /admin-api/admin
+        // WHEN  發送 POST /admin-api/admin（帶合法 status 以確保驗證通過，測到權限檢查）
         $response = $this->actingAs($actor, 'admin')
             ->postJson('/admin-api/admin', [
                 'name' => '張三',
@@ -226,6 +296,7 @@ class StoreTest extends TestCase
                 'password' => 'password123',
                 'passwordConfirmation' => 'password123',
                 'roleId' => 1,
+                'status' => 'active',
             ]);
 
         // THEN  回傳 403

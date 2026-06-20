@@ -13,7 +13,7 @@ class ListTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** 成功取得角色列表，每筆含 id、name、isDeletable，且不含 permissions */
+    /** 成功取得角色分頁列表，items 每筆含 id、name、isDeletable，不含 permissions，且不含 total */
     public function testReturnsRoleListWithIsDeletable(): void
     {
         // GIVEN 有 view_roles 權限的管理員
@@ -23,19 +23,22 @@ class ListTest extends TestCase
         $response = $this->actingAs($actor, 'admin')
             ->getJson('/admin-api/roles');
 
-        // THEN  回傳 200，data 每筆含 id、name、isDeletable，且不含 permissions
+        // THEN  回傳 200，data 為分頁結構（items + 分頁欄位），items 每筆含 id、name、isDeletable，且不含 total
         $response->assertOk()
             ->assertJsonStructure([
                 'data' => [
-                    '*' => [
-                        'id',
-                        'name',
-                        'isDeletable',
+                    'items' => [
+                        '*' => ['id', 'name', 'isDeletable'],
                     ],
+                    'currentPage',
+                    'perPage',
+                    'lastPage',
                 ],
             ]);
 
-        foreach ($response->json('data') as $entry) {
+        $this->assertArrayNotHasKey('total', $response->json('data'));
+
+        foreach ($response->json('data.items') as $entry) {
             $this->assertArrayNotHasKey('permissions', $entry);
             $this->assertIsBool($entry['isDeletable']);
         }
@@ -56,7 +59,7 @@ class ListTest extends TestCase
 
         // THEN  used_role 的 isDeletable 為 false
         $response->assertOk();
-        $entry = collect($response->json('data'))->firstWhere('name', 'used_role');
+        $entry = collect($response->json('data.items'))->firstWhere('name', 'used_role');
 
         $this->assertNotNull($entry);
         $this->assertFalse($entry['isDeletable']);
@@ -75,7 +78,7 @@ class ListTest extends TestCase
 
         // THEN  unused_role 的 isDeletable 為 true
         $response->assertOk();
-        $entry = collect($response->json('data'))->firstWhere('name', 'unused_role');
+        $entry = collect($response->json('data.items'))->firstWhere('name', 'unused_role');
 
         $this->assertNotNull($entry);
         $this->assertTrue($entry['isDeletable']);
@@ -98,7 +101,7 @@ class ListTest extends TestCase
 
         // THEN  orphan_role 的 isDeletable 為 true
         $response->assertOk();
-        $entry = collect($response->json('data'))->firstWhere('name', 'orphan_role');
+        $entry = collect($response->json('data.items'))->firstWhere('name', 'orphan_role');
 
         $this->assertNotNull($entry);
         $this->assertTrue($entry['isDeletable']);
@@ -115,9 +118,9 @@ class ListTest extends TestCase
         $response = $this->actingAs($actor, 'admin')
             ->getJson('/admin-api/roles');
 
-        // THEN  回傳 200，web_role 不出現在 data 中
+        // THEN  回傳 200，web_role 不出現在 items 中
         $response->assertOk();
-        $names = collect($response->json('data'))->pluck('name');
+        $names = collect($response->json('data.items'))->pluck('name');
         $this->assertNotContains('web_role', $names);
     }
 
@@ -135,7 +138,7 @@ class ListTest extends TestCase
 
         // THEN  只回傳 name 含 edit 的角色
         $response->assertOk();
-        $names = collect($response->json('data'))->pluck('name');
+        $names = collect($response->json('data.items'))->pluck('name');
         $this->assertContains('editor', $names);
         $this->assertNotContains('viewer', $names);
     }
@@ -154,9 +157,60 @@ class ListTest extends TestCase
 
         // THEN  兩個角色都出現（actor_role 也會出現，共 3 筆）
         $response->assertOk();
-        $names = collect($response->json('data'))->pluck('name');
+        $names = collect($response->json('data.items'))->pluck('name');
         $this->assertContains('editor', $names);
         $this->assertContains('viewer', $names);
+    }
+
+    /** perPage=25 時每頁最多 25 筆，且 perPage 回傳 25 */
+    public function testRespectsPerPage(): void
+    {
+        // GIVEN 有 view_roles 權限的管理員，及 30 個角色
+        $actor = $this->adminWith('view_roles');
+        for ($i = 0; $i < 30; ++$i) {
+            Role::create(['name' => "role_{$i}", 'guard_name' => Guard::ADMIN->value]);
+        }
+
+        // WHEN  帶 perPage=25
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson('/admin-api/roles?perPage=25');
+
+        // THEN  perPage 為 25，且 items 最多 25 筆
+        $response->assertOk()
+            ->assertJsonPath('data.perPage', 25);
+        $this->assertCount(25, $response->json('data.items'));
+    }
+
+    /** perPage 傳入不合法值時回傳 422，errors.perPage 含錯誤訊息 */
+    public function testRejectsInvalidPerPage(): void
+    {
+        // GIVEN 有 view_roles 權限的管理員
+        $actor = $this->adminWith('view_roles');
+
+        // WHEN  傳入 perPage=100
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson('/admin-api/roles?perPage=100');
+
+        // THEN  回傳 422，errors.perPage 包含驗證失敗訊息
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['perPage']);
+    }
+
+    /** 系統角色（is_system=true）不出現在列表 */
+    public function testExcludesSystemRole(): void
+    {
+        // GIVEN 有 view_roles 權限的管理員，及一個系統角色
+        $actor = $this->adminWith('view_roles');
+        Role::create(['name' => 'system_role', 'guard_name' => Guard::ADMIN->value, 'is_system' => true]);
+
+        // WHEN  發送 GET /admin-api/roles
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson('/admin-api/roles');
+
+        // THEN  回傳 200，system_role 不出現在 items 中
+        $response->assertOk();
+        $names = collect($response->json('data.items'))->pluck('name');
+        $this->assertNotContains('system_role', $names);
     }
 
     /** 未認證請求回傳 401 */

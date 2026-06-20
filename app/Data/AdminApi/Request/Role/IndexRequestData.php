@@ -8,6 +8,8 @@ readonly class IndexRequestData
 {
     public function __construct(
         public ?string $keyword,
+        public int $perPage,
+        public int $page,
     ) {
     }
 
@@ -15,6 +17,8 @@ readonly class IndexRequestData
     {
         return new self(
             keyword: $request->keyword,
+            perPage: (int)($request->perPage ?? config('pagination.perPage.default')),
+            page: (int)($request->page ?? config('pagination.page.default')),
         );
     }
 }

@@ -12,7 +12,7 @@ use App\Models\Role;
 use App\Repositories\Applications\Role\RoleRepository;
 use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Traits\AsRepositoryProxy;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RoleService
 {
@@ -24,12 +24,22 @@ class RoleService
     }
 
     /** 取得角色列表（含是否有 admin 使用該角色，供前端判斷可否刪除） */
-    public function listRoles(IndexRequestData $data, string $guardName): Collection
+    public function listRoles(IndexRequestData $data, string $guardName): LengthAwarePaginator
     {
-        return $this->get([
-            'guard_name' => $guardName,
-            'keyword' => $data->keyword,
-        ])->load('admins');
+        $paginator = $this->paginate(
+            perPage: $data->perPage,
+            page: $data->page,
+            filters: [
+                'guard_name' => $guardName,
+                'keyword' => $data->keyword,
+                'isSystem' => false,
+            ],
+        );
+
+        // 載入 admins 供 isDeletable 判斷（該角色是否仍被 admin 使用）
+        $paginator->getCollection()->load('admins');
+
+        return $paginator;
     }
 
     /** 依 id 查詢角色，找不到拋 404 */
@@ -39,6 +49,7 @@ class RoleService
         $role = $this->first([
             'id' => $id,
             'guard_name' => $guardName,
+            'isSystem' => false,
         ]);
 
         throw_unless(

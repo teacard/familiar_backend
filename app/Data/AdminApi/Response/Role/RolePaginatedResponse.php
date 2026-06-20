@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Data\AdminApi\Response\Admin;
+namespace App\Data\AdminApi\Response\Role;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
-class AdminPaginatedResponse extends Data
+class RolePaginatedResponse extends Data
 {
     public function __construct(
-        /** @var Collection<int, AdminResponse> */
+        /** @var Collection<int, RoleIndexResponse> */
         public Collection $items,
         public int $currentPage,
         public int $perPage,
@@ -20,7 +20,7 @@ class AdminPaginatedResponse extends Data
     public static function fromPaginator(LengthAwarePaginator $paginator): self
     {
         return new self(
-            items: AdminResponse::collect($paginator->getCollection()),
+            items: RoleIndexResponse::collect($paginator->getCollection()),
             currentPage: $paginator->currentPage(),
             perPage: $paginator->perPage(),
             lastPage: $paginator->lastPage(),

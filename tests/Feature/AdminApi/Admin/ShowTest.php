@@ -12,7 +12,7 @@ class ShowTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** 存在的 id 可取得後台人員完整資料 */
+    /** 存在的 id 可取得後台人員詳情（name、email、role、status，不含 id、lastLoginDate） */
     public function testReturnsAdminData(): void
     {
         // GIVEN 有 view_users 權限的管理員，及一筆待查詢的後台人員
@@ -25,10 +25,13 @@ class ShowTest extends TestCase
         $response = $this->actingAs($actor, 'admin')
             ->getJson("/admin-api/admin/{$target->id}");
 
-        // THEN  回傳 200 含完整欄位
+        // THEN  回傳 200 含詳情欄位，且不含 id 與 lastLoginDate
         $response->assertOk()
-            ->assertJsonStructure(['data' => ['id', 'name', 'email', 'role', 'status', 'lastLoginDate']])
-            ->assertJsonPath('data.id', $target->id);
+            ->assertJsonStructure(['data' => ['name', 'email', 'role', 'status']])
+            ->assertJsonPath('data.name', $target->name);
+
+        $this->assertArrayNotHasKey('id', $response->json('data'));
+        $this->assertArrayNotHasKey('lastLoginDate', $response->json('data'));
     }
 
     /** 不存在的 id 回傳 404 */
@@ -56,6 +59,23 @@ class ShowTest extends TestCase
         $target->delete();
 
         // WHEN  查詢已軟刪除的 id
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson("/admin-api/admin/{$target->id}");
+
+        // THEN  回傳 404
+        $response->assertNotFound();
+    }
+
+    /** 查詢超級管理員回傳 404（受屏蔽） */
+    public function testReturns404ForSuperAdmin(): void
+    {
+        // GIVEN 有 view_users 權限的管理員，及一筆超級管理員
+        $actor = $this->adminWith('view_users');
+        $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
+        $target = Admin::factory()->superAdmin()->create();
+        $target->assignRole($staffRole);
+
+        // WHEN  查詢該超級管理員的 id
         $response = $this->actingAs($actor, 'admin')
             ->getJson("/admin-api/admin/{$target->id}");
 

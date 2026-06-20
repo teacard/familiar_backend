@@ -7,7 +7,7 @@ use App\Data\AdminApi\Request\Admin\StoreRequestData;
 use App\Data\AdminApi\Request\Admin\UpdateRequestData;
 use App\Data\AdminApi\Request\Admin\UpdateStatusRequestData;
 use App\Data\AdminApi\Response\Admin\AdminPaginatedResponse;
-use App\Data\AdminApi\Response\Admin\AdminResponse;
+use App\Data\AdminApi\Response\Admin\AdminShowResponse;
 use App\Enums\Auth\Guard;
 use App\Enums\Permission\Name;
 use App\Exceptions\ForbiddenException;
@@ -76,7 +76,7 @@ class AdminController extends Controller
         );
 
         return $this->success(
-            AdminResponse::fromModel($this->adminService->findOrFail($id))
+            AdminShowResponse::fromModel($this->adminService->findOrFail($id))
         );
     }
 
