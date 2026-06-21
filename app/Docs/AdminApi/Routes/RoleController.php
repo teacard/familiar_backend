@@ -5,6 +5,7 @@ namespace App\Docs\AdminApi\Routes;
 use App\Docs\AdminApi\Requests\Role\StoreRequest;
 use App\Docs\AdminApi\Requests\Role\UpdateRequest;
 use App\Docs\AdminApi\ResponseContents\Role\RolePaginatedResponseContent;
+use App\Docs\AdminApi\ResponseContents\Role\RoleSelectResponseContent;
 use App\Docs\AdminApi\ResponseContents\Role\RoleShowResponseContent;
 use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
@@ -71,6 +72,21 @@ class RoleController
         ],
     )]
     public function store(): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/roles/select',
+        operationId: 'admin-api.role.select',
+        summary: '角色管理-下拉選單',
+        security: [['sanctum' => []]],
+        tags: [Tags::ROLE],
+        responses: [
+            new OkResponse(contentItemsRef: RoleSelectResponseContent::class),
+            new UnauthorizedResponse(),
+        ],
+    )]
+    public function select(): void
     {
     }
 

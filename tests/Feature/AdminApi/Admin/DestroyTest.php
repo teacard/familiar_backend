@@ -12,8 +12,8 @@ class DestroyTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** 成功軟刪除後台人員，回傳空陣列，deleted_at 被設定 */
-    public function testPerformsSoftDelete(): void
+    /** 成功硬刪除後台人員，回傳空陣列，資料列被移除 */
+    public function testDeletesAdmin(): void
     {
         // GIVEN 有 delete_users 權限的管理員，及一筆待刪除的後台人員
         $actor = $this->adminWith('delete_users');
@@ -25,10 +25,10 @@ class DestroyTest extends TestCase
         $response = $this->actingAs($actor, 'admin')
             ->deleteJson("/admin-api/admin/{$target->id}");
 
-        // THEN  回傳 200，data 為空陣列，deleted_at 已被設定
+        // THEN  回傳 200，data 為空陣列，資料列已從 admins 移除
         $response->assertOk()
             ->assertJsonPath('data', []);
-        $this->assertSoftDeleted('admins', ['id' => $target->id]);
+        $this->assertDatabaseMissing('admins', ['id' => $target->id]);
     }
 
     /** 軟刪除後，列表不再顯示該後台人員 */
@@ -52,10 +52,10 @@ class DestroyTest extends TestCase
         $this->assertNotContains($target->id, $ids);
     }
 
-    /** 刪除已軟刪除的後台人員回傳 404 */
+    /** 刪除已被刪除的後台人員回傳 404 */
     public function testReturns404ForAlreadyDeletedAdmin(): void
     {
-        // GIVEN 有 delete_users 權限的管理員，及一筆已軟刪除的後台人員
+        // GIVEN 有 delete_users 權限的管理員，及一筆已被刪除的後台人員
         $actor = $this->adminWith('delete_users');
         $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
         $target = Admin::factory()->create();
@@ -85,7 +85,7 @@ class DestroyTest extends TestCase
 
         // THEN  回傳 404，且資料未被刪除
         $response->assertNotFound();
-        $this->assertDatabaseHas('admins', ['id' => $target->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('admins', ['id' => $target->id]);
     }
 
     /** 缺少 delete_users 權限時回傳 403 */
