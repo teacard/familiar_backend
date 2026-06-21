@@ -6,7 +6,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Schema(
     schema: 'AdminApi.Media.UploadRequest',
-    required: ['file', 'type'],
+    required: ['file'],
 )]
 class UploadRequest
 {

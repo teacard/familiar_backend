@@ -9,6 +9,7 @@ use App\Data\AdminApi\Request\Admin\UpdateStatusRequestData;
 use App\Data\AdminApi\Response\Admin\AdminPaginatedResponse;
 use App\Data\AdminApi\Response\Admin\AdminShowResponse;
 use App\Enums\Auth\Guard;
+use App\Enums\Media\CollectionName;
 use App\Enums\Permission\Name;
 use App\Exceptions\ForbiddenException;
 use App\Http\Controllers\Controller;
@@ -106,7 +107,9 @@ class AdminController extends Controller
         DB::transaction(function () use ($admin, $data): void {
             $this->adminService->updateAdmin(admin: $admin, data: $data);
 
-            if (null !== $data->mediaId) {
+            if (is_null($data->mediaId)) {
+                $admin->clearMediaCollection(CollectionName::ADMIN->value);
+            } else {
                 $this->mediaService->transferToAdmin($data->mediaId, $admin);
             }
         });

@@ -64,11 +64,9 @@ class MediaService
         return $count;
     }
 
-    /** 將指定暫存媒體改掛至後台人員的頭像集合（覆蓋舊頭像，僅更新 DB；找不到時回 false） */
+    /** 將指定暫存媒體改掛至後台人員的頭像集合（僅更新 DB；找不到時回 false） */
     public function transferToAdmin(int $mediaId, Admin $admin): bool
     {
-        $admin->clearMediaCollection(CollectionName::ADMIN->value);
-
         return (bool)$this->repository->updateTemporaryToModel(
             mediaId: $mediaId,
             modelType: $admin->getMorphClass(),

@@ -69,6 +69,10 @@ return [
             'url' => env('MINIO_URL'),
             'endpoint' => env('MINIO_ENDPOINT'),
             'use_path_style_endpoint' => true,
+            // aws-sdk-php >= 3.337 預設對請求掛上資料完整性 checksum（when_supported），
+            // MinIO 會以 InvalidRequest 拒絕。改回 when_required 才相容 S3 相容儲存。
+            'request_checksum_calculation' => 'when_required',
+            'response_checksum_validation' => 'when_required',
             'throw' => false,
             'report' => false,
         ],
