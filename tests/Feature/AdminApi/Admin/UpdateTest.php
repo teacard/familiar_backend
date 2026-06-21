@@ -2,8 +2,14 @@
 
 namespace Tests\Feature\AdminApi\Admin;
 
+use App\Enums\Media\CollectionName;
+use App\Enums\TemporaryMedia\SystemName;
 use App\Models\Admin;
+use App\Models\TemporaryMedia;
+use Database\Seeders\TemporaryMediaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -178,6 +184,67 @@ class UpdateTest extends TestCase
 
         // THEN  回傳 404
         $response->assertNotFound();
+    }
+
+    /** mediaId 為 null 時刪除後台人員頭像 */
+    public function testDeletesAvatarWhenMediaIdIsNull(): void
+    {
+        // GIVEN 有 edit_users 權限的管理員，及一筆有頭像的後台人員
+        Storage::fake('minio', ['url' => 'http://localhost/media']);
+        $actor = $this->adminWith('edit_users');
+        $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
+        $target = Admin::factory()->create();
+        $target->assignRole($staffRole);
+        $target->addMedia(UploadedFile::fake()->image('avatar.png'))
+            ->toMediaCollection(CollectionName::ADMIN->value);
+
+        // WHEN  PUT body 中 mediaId 為 null
+        $response = $this->actingAs($actor, 'admin')
+            ->putJson("/admin-api/admin/{$target->id}", [
+                'name' => $target->name,
+                'email' => $target->email,
+                'roleId' => $staffRole->id,
+                'status' => 'active',
+                'mediaId' => null,
+            ]);
+
+        // THEN  回傳 200，頭像已刪除
+        $response->assertOk()->assertJsonPath('data', []);
+        $this->assertCount(0, $target->fresh()->getMedia(CollectionName::ADMIN->value));
+    }
+
+    /** mediaId 有效時將暫存媒體轉移至後台人員頭像集合 */
+    public function testTransfersTemporaryMediaWhenMediaIdProvided(): void
+    {
+        // GIVEN 有 edit_users 權限的管理員、後台人員，以及一筆暫存媒體
+        Storage::fake('minio', ['url' => 'http://localhost/media']);
+        $this->seed(TemporaryMediaSeeder::class);
+        $actor = $this->adminWith('edit_users');
+        $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
+        $target = Admin::factory()->create();
+        $target->assignRole($staffRole);
+        $owner = TemporaryMedia::where('system_name', SystemName::ADMIN->value)->first();
+        $media = $owner->addMedia(UploadedFile::fake()->image('new.png'))
+            ->toMediaCollection(CollectionName::TEMPORARY->value);
+
+        // WHEN  PUT body 帶入暫存媒體 id
+        $response = $this->actingAs($actor, 'admin')
+            ->putJson("/admin-api/admin/{$target->id}", [
+                'name' => $target->name,
+                'email' => $target->email,
+                'roleId' => $staffRole->id,
+                'status' => 'active',
+                'mediaId' => $media->id,
+            ]);
+
+        // THEN  回傳 200，媒體已掛到後台人員的 admin 集合
+        $response->assertOk()->assertJsonPath('data', []);
+        $this->assertDatabaseHas('media', [
+            'id' => $media->id,
+            'model_type' => (new Admin())->getMorphClass(),
+            'model_id' => $target->id,
+            'collection_name' => CollectionName::ADMIN->value,
+        ]);
     }
 
     /** 缺少 edit_users 權限時回傳 403 */

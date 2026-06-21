@@ -20,6 +20,14 @@ class AdminShowResponseContent
     #[OA\Property(description: '狀態', enum: [StatusEnum::class], example: StatusEnum::ACTIVE->value)]
     public string $status;
 
-    #[OA\Property(description: '頭像完整 URL（無頭像時為 null）', example: 'http://minio/media/1/image_abc.png')]
-    public ?string $avatarUrl;
+    #[OA\Property(
+        description: '頭像（無頭像時為 null）',
+        nullable: true,
+        properties: [
+            new OA\Property(property: 'id', type: 'integer', description: '媒體 ID', example: 1),
+            new OA\Property(property: 'url', type: 'string', description: '媒體完整 URL', example: 'http://localhost/media/1/avatar_abc123.png'),
+        ],
+        type: 'object',
+    )]
+    public ?object $avatar;
 }

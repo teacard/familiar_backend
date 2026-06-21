@@ -13,18 +13,20 @@ class AdminShowResponse extends Data
         public string $email,
         public string $role,
         public string $status,
-        public ?string $avatarUrl,
+        public ?AdminAvatarResponse $avatar,
     ) {
     }
 
     public static function fromModel(Admin $admin): self
     {
+        $firstMedia = $admin->getFirstMedia(CollectionName::ADMIN->value);
+
         return new self(
             name: $admin->name,
             email: $admin->email,
             role: $admin->getRoleNames()->first(),
             status: $admin->status->value,
-            avatarUrl: $admin->getFirstMediaUrl(CollectionName::ADMIN->value) ?: null,
+            avatar: $firstMedia ? AdminAvatarResponse::fromMedia($firstMedia) : null,
         );
     }
 }
