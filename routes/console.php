@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // 每日清除超過 48 小時的 Telescope 觀測資料，避免無限成長
 Schedule::command('telescope:prune --hours=48')->daily();
+
+// 每日清除暫存集合中建立超過 1 天的媒體，避免未被採用的上傳檔案殘留
+Schedule::command('media:prune-temporary')->daily();

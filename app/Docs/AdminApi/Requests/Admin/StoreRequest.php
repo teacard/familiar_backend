@@ -28,4 +28,7 @@ class StoreRequest
 
     #[OA\Property(description: '帳號狀態', enum: [StatusEnum::class], example: StatusEnum::ACTIVE->value)]
     public string $status;
+
+    #[OA\Property(description: '頭像媒體 ID（來自暫存上傳，選填）', example: 1)]
+    public ?int $mediaId;
 }

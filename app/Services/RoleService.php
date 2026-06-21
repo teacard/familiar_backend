@@ -13,6 +13,7 @@ use App\Repositories\Applications\Role\RoleRepository;
 use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Traits\AsRepositoryProxy;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class RoleService
 {
@@ -40,6 +41,15 @@ class RoleService
         $paginator->getCollection()->load('admins');
 
         return $paginator;
+    }
+
+    /** 取得可指派角色的精簡清單（不分頁、排除系統角色），供前端下拉選單使用 */
+    public function selectRoles(string $guardName): Collection
+    {
+        return $this->get([
+            'guard_name' => $guardName,
+            'isSystem' => false,
+        ]);
     }
 
     /** 依 id 查詢角色，找不到拋 404 */

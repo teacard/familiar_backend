@@ -13,6 +13,7 @@ readonly class StoreRequestData
         public string $password,
         public int $roleId,
         public Status $status,
+        public ?int $mediaId,
     ) {
     }
 
@@ -24,6 +25,7 @@ readonly class StoreRequestData
             password: $request->password,
             roleId: $request->roleId,
             status: Status::from($request->status),
+            mediaId: $request->mediaId,
         );
     }
 }

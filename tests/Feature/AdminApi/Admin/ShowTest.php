@@ -27,8 +27,9 @@ class ShowTest extends TestCase
 
         // THEN  回傳 200 含詳情欄位，且不含 id 與 lastLoginDate
         $response->assertOk()
-            ->assertJsonStructure(['data' => ['name', 'email', 'role', 'status']])
-            ->assertJsonPath('data.name', $target->name);
+            ->assertJsonStructure(['data' => ['name', 'email', 'role', 'status', 'avatarUrl']])
+            ->assertJsonPath('data.name', $target->name)
+            ->assertJsonPath('data.avatarUrl', null);
 
         $this->assertArrayNotHasKey('id', $response->json('data'));
         $this->assertArrayNotHasKey('lastLoginDate', $response->json('data'));
@@ -48,17 +49,17 @@ class ShowTest extends TestCase
         $response->assertNotFound();
     }
 
-    /** 已軟刪除的後台人員回傳 404 */
-    public function testReturns404ForSoftDeletedAdmin(): void
+    /** 已刪除的後台人員回傳 404 */
+    public function testReturns404ForDeletedAdmin(): void
     {
-        // GIVEN 有 view_users 權限的管理員，以及一筆已軟刪除的後台人員
+        // GIVEN 有 view_users 權限的管理員，以及一筆已刪除的後台人員
         $actor = $this->adminWith('view_users');
         $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
         $target = Admin::factory()->create();
         $target->assignRole($staffRole);
         $target->delete();
 
-        // WHEN  查詢已軟刪除的 id
+        // WHEN  查詢已刪除的 id
         $response = $this->actingAs($actor, 'admin')
             ->getJson("/admin-api/admin/{$target->id}");
 

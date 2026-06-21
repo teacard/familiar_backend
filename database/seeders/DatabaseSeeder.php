@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             AdminSeeder::class,
+            TemporaryMediaSeeder::class,
         ]);
 
         User::updateOrCreate(

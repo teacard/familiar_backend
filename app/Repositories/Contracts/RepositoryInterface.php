@@ -17,4 +17,8 @@ interface RepositoryInterface
     public function first(array $filters = []): ?Model;
 
     public function create(array $attributes): Model;
+
+    public function update(array $filters, array $attributes): int;
+
+    public function delete(array $filters = []): int;
 }

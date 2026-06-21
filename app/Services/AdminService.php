@@ -98,7 +98,7 @@ class AdminService
         $admin->update(['status' => $data->status->value]);
     }
 
-    /** 軟刪除後台人員 */
+    /** 刪除後台人員（硬刪除） */
     public function deleteAdmin(Admin $admin): void
     {
         $admin->delete();

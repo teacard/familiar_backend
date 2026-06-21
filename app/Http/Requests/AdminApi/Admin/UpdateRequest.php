@@ -19,6 +19,7 @@ class UpdateRequest extends FormRequest
             'passwordConfirmation' => ['nullable', 'string'],
             'roleId' => ['required', 'integer', 'exists:roles,id'],
             'status' => ['required', Rule::enum(Status::class)],
+            'mediaId' => ['nullable', 'integer', 'exists:medias,id'],
         ];
     }
 
@@ -30,6 +31,7 @@ class UpdateRequest extends FormRequest
             'password' => trans('admin.attributes.adminapi.password'),
             'roleId' => trans('admin.attributes.adminapi.roleId'),
             'status' => trans('admin.attributes.adminapi.status'),
+            'mediaId' => trans('admin.attributes.adminapi.mediaId'),
         ];
     }
 }

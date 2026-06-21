@@ -44,4 +44,18 @@ abstract class Repository implements RepositoryInterface
     {
         return $this->query()->create($attributes);
     }
+
+    public function update(array $filters, array $attributes): int
+    {
+        if (empty($filters)) {
+            return 0;
+        }
+
+        return $this->applyFilterQuery($filters)->update($attributes);
+    }
+
+    public function delete(array $filters = []): int
+    {
+        return $this->applyFilterQuery($filters)->delete();
+    }
 }

@@ -3,10 +3,12 @@
 namespace App\Docs\AdminApi\Routes;
 
 use App\Docs\AdminApi\Requests\Auth\LoginRequest;
+use App\Docs\AdminApi\ResponseContents\Admin\ProfileResponseContent;
 use App\Docs\AdminApi\ResponseContents\Auth\LoginResponseContent;
 use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
 use App\Docs\All\Responses\OkResponse;
+use App\Docs\All\Responses\UnauthorizedResponse;
 use App\Docs\All\Responses\UnprocessableResponse;
 use App\Enums\ApiCode;
 use OpenApi\Attributes as OA;
@@ -25,6 +27,21 @@ class AuthController
         ],
     )]
     public function login(): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/profile',
+        operationId: 'admin-api.auth.profile',
+        summary: '個人資料-取得',
+        security: [['sanctum' => []]],
+        tags: [Tags::AUTH],
+        responses: [
+            new OkResponse(contentRef: ProfileResponseContent::class),
+            new UnauthorizedResponse(),
+        ],
+    )]
+    public function profile(): void
     {
     }
 }

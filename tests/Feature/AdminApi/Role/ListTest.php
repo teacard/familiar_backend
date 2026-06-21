@@ -84,10 +84,10 @@ class ListTest extends TestCase
         $this->assertTrue($entry['isDeletable']);
     }
 
-    /** 軟刪除的 admin 不算使用該角色，isDeletable 仍為 true */
-    public function testSoftDeletedAdminDoesNotBlockDeletion(): void
+    /** 已刪除的 admin 不算使用該角色，isDeletable 仍為 true */
+    public function testDeletedAdminDoesNotBlockDeletion(): void
     {
-        // GIVEN 有 view_roles 權限的管理員，及一個僅被軟刪除 admin 指派的角色
+        // GIVEN 有 view_roles 權限的管理員，及一個僅被已刪除 admin 指派的角色
         $actor = $this->adminWith('view_roles');
 
         $role = Role::create(['name' => 'orphan_role', 'guard_name' => Guard::ADMIN->value]);

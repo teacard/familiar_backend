@@ -2,6 +2,7 @@
 
 namespace App\Data\AdminApi\Response\Admin;
 
+use App\Enums\Media\CollectionName;
 use App\Models\Admin;
 use Spatie\LaravelData\Data;
 
@@ -12,6 +13,7 @@ class AdminShowResponse extends Data
         public string $email,
         public string $role,
         public string $status,
+        public ?string $avatarUrl,
     ) {
     }
 
@@ -22,6 +24,7 @@ class AdminShowResponse extends Data
             email: $admin->email,
             role: $admin->getRoleNames()->first(),
             status: $admin->status->value,
+            avatarUrl: $admin->getFirstMediaUrl(CollectionName::ADMIN->value) ?: null,
         );
     }
 }

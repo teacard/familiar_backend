@@ -6,6 +6,7 @@ use App\Data\AdminApi\Request\Role\IndexRequestData;
 use App\Data\AdminApi\Request\Role\StoreRequestData;
 use App\Data\AdminApi\Request\Role\UpdateRequestData;
 use App\Data\AdminApi\Response\Role\RolePaginatedResponse;
+use App\Data\AdminApi\Response\Role\RoleSelectResponse;
 use App\Data\AdminApi\Response\Role\RoleShowResponse;
 use App\Enums\Auth\Guard;
 use App\Enums\Permission\Name;
@@ -43,6 +44,17 @@ class RoleController extends Controller
 
         return $this->success(
             RolePaginatedResponse::fromPaginator($paginator)
+        );
+    }
+
+    /** 角色管理-下拉選單 */
+    public function select(): JsonResponse
+    {
+        // 僅需登入即可取得，不額外檢查權限（供新增/編輯後台人員表單使用）
+        return $this->success(
+            RoleSelectResponse::collect(
+                $this->roleService->selectRoles(Guard::ADMIN->value)
+            )
         );
     }
 

@@ -13,6 +13,7 @@ readonly class UpdateRequestData
         public ?string $password,
         public int $roleId,
         public Status $status,
+        public ?int $mediaId,
     ) {
     }
 
@@ -24,6 +25,7 @@ readonly class UpdateRequestData
             password: $request->password ?: null,
             roleId: $request->roleId,
             status: Status::from($request->status),
+            mediaId: $request->mediaId,
         );
     }
 }

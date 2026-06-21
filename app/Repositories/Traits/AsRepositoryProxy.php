@@ -35,5 +35,15 @@ trait AsRepositoryProxy
         return $this->getProxyRepository()->create($attributes);
     }
 
+    public function update(array $filters, array $attributes): int
+    {
+        return $this->getProxyRepository()->update($filters, $attributes);
+    }
+
+    public function delete(array $filters = []): int
+    {
+        return $this->getProxyRepository()->delete($filters);
+    }
+
     abstract protected function getProxyRepository(): RepositoryInterface;
 }

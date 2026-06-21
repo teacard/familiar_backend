@@ -57,6 +57,21 @@ return [
             'throw' => false,
             'report' => false,
         ],
+
+        // 媒體儲存：S3 相容物件儲存（測試站為 docker 內的 MinIO 容器，非真實 AWS S3）
+        'minio' => [
+            'driver' => 's3',
+            'key' => env('MINIO_ACCESS_KEY'),
+            'secret' => env('MINIO_SECRET_KEY'),
+            // MinIO 不使用 region，但 AWS SDK 建立 client 時要求必填，留預設佔位值即可
+            'region' => env('MINIO_REGION', 'us-east-1'),
+            'bucket' => env('MINIO_BUCKET', 'familiar-media'),
+            'url' => env('MINIO_URL'),
+            'endpoint' => env('MINIO_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'throw' => false,
+            'report' => false,
+        ],
     ],
 
     /*
