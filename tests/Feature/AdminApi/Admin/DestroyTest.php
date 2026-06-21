@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\AdminApi\Admin;
 
+use App\Enums\Media\CollectionName;
 use App\Models\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -86,6 +89,31 @@ class DestroyTest extends TestCase
         // THEN  回傳 404，且資料未被刪除
         $response->assertNotFound();
         $this->assertDatabaseHas('admins', ['id' => $target->id]);
+    }
+
+    /** 刪除後台人員時，其頭像媒體與實體檔案一併被清除 */
+    public function testDestroyAlsoDeletesAdminMedia(): void
+    {
+        // GIVEN 已有頭像的後台人員
+        Storage::fake('minio', ['url' => 'http://localhost/media']);
+        $actor = $this->adminWith('delete_users');
+        $staffRole = Role::create(['name' => 'staff_role', 'guard_name' => 'admin']);
+        $target = Admin::factory()->create();
+        $target->assignRole($staffRole);
+        $avatarMedia = $target->addMedia(UploadedFile::fake()->image('avatar.png'))
+            ->toMediaCollection(CollectionName::ADMIN->value);
+        $path = $avatarMedia->getPathRelativeToRoot();
+
+        Storage::disk('minio')->assertExists($path);
+
+        // WHEN  刪除該後台人員
+        $this->actingAs($actor, 'admin')
+            ->deleteJson("/admin-api/admin/{$target->id}")
+            ->assertOk();
+
+        // THEN  media 紀錄與實體檔案皆被刪除
+        $this->assertDatabaseMissing('media', ['id' => $avatarMedia->id]);
+        Storage::disk('minio')->assertMissing($path);
     }
 
     /** 缺少 delete_users 權限時回傳 403 */

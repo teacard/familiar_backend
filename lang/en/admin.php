@@ -11,6 +11,7 @@ return [
             'password' => 'Password',
             'password_confirmation' => 'Password Confirmation',
             'permissions' => 'Permissions',
+            'mediaId' => 'Avatar Media ID',
         ],
         'api' => [],
     ],

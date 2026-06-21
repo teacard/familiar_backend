@@ -11,6 +11,7 @@ return [
             'password' => '密碼',
             'password_confirmation' => '確認密碼',
             'permissions' => '權限',
+            'mediaId' => '頭像媒體 ID',
         ],
         'api' => [],
     ],

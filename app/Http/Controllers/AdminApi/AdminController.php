@@ -18,12 +18,15 @@ use App\Http\Requests\AdminApi\Admin\UpdateRequest;
 use App\Http\Requests\AdminApi\Admin\UpdateStatusRequest;
 use App\Models\Admin;
 use App\Services\AdminService;
+use App\Services\MediaService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function __construct(
         protected AdminService $adminService,
+        protected MediaService $mediaService,
     ) {
     }
 
@@ -58,9 +61,15 @@ class AdminController extends Controller
             exception: ForbiddenException::class
         );
 
-        $this->adminService->createAdmin(
-            StoreRequestData::fromRequest($request)
-        );
+        $data = StoreRequestData::fromRequest($request);
+
+        DB::transaction(function () use ($data): void {
+            $admin = $this->adminService->createAdmin($data);
+
+            if (!is_null($data->mediaId)) {
+                $this->mediaService->transferToAdmin($data->mediaId, $admin);
+            }
+        });
 
         return $this->success([]);
     }
@@ -75,9 +84,10 @@ class AdminController extends Controller
             exception: ForbiddenException::class
         );
 
-        return $this->success(
-            AdminShowResponse::fromModel($this->adminService->findOrFail($id))
-        );
+        $admin = $this->adminService->findOrFail($id);
+        $admin->load('media');
+
+        return $this->success(AdminShowResponse::fromModel($admin));
     }
 
     /** 後台人員管理-編輯 */
@@ -91,11 +101,15 @@ class AdminController extends Controller
         );
 
         $admin = $this->adminService->findOrFail($id);
+        $data = UpdateRequestData::fromRequest($request);
 
-        $this->adminService->updateAdmin(
-            admin: $admin,
-            data: UpdateRequestData::fromRequest($request),
-        );
+        DB::transaction(function () use ($admin, $data): void {
+            $this->adminService->updateAdmin(admin: $admin, data: $data);
+
+            if (null !== $data->mediaId) {
+                $this->mediaService->transferToAdmin($data->mediaId, $admin);
+            }
+        });
 
         return $this->success([]);
     }
