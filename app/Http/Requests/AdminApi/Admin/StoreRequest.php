@@ -17,7 +17,7 @@ class StoreRequest extends FormRequest
             'passwordConfirmation' => ['required', 'string'],
             'roleId' => ['required', 'integer', 'exists:roles,id'],
             'status' => ['required', Rule::enum(Status::class)],
-            'mediaId' => ['nullable', 'integer', 'exists:medias,id'],
+            'mediaId' => ['nullable', 'integer', 'exists:media,id'],
         ];
     }
 
