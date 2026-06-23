@@ -30,6 +30,11 @@ trait AsRepositoryProxy
         return $this->getProxyRepository()->first($filters);
     }
 
+    public function exists(array $filters = []): bool
+    {
+        return $this->getProxyRepository()->exists($filters);
+    }
+
     public function create(array $attributes): Model
     {
         return $this->getProxyRepository()->create($attributes);
