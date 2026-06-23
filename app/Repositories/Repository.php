@@ -40,6 +40,11 @@ abstract class Repository implements RepositoryInterface
         return $this->applyFilterQuery($filters)->first();
     }
 
+    public function exists(array $filters = []): bool
+    {
+        return $this->applyFilterQuery($filters)->exists();
+    }
+
     public function create(array $attributes): Model
     {
         return $this->query()->create($attributes);
