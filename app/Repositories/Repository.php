@@ -40,6 +40,11 @@ abstract class Repository implements RepositoryInterface
         return $this->applyFilterQuery($filters)->first();
     }
 
+    public function count(array $filters = []): int
+    {
+        return $this->applyFilterQuery($filters)->count();
+    }
+
     public function create(array $attributes): Model
     {
         return $this->query()->create($attributes);
@@ -52,6 +57,15 @@ abstract class Repository implements RepositoryInterface
         }
 
         return $this->applyFilterQuery($filters)->update($attributes);
+    }
+
+    public function decrement(array $filters, string $column, int $amount = 1): int
+    {
+        if (empty($filters)) {
+            return 0;
+        }
+
+        return $this->applyFilterQuery($filters)->decrement($column, $amount);
     }
 
     public function delete(array $filters = []): int

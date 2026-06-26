@@ -30,6 +30,11 @@ trait AsRepositoryProxy
         return $this->getProxyRepository()->first($filters);
     }
 
+    public function count(array $filters = []): int
+    {
+        return $this->getProxyRepository()->count($filters);
+    }
+
     public function create(array $attributes): Model
     {
         return $this->getProxyRepository()->create($attributes);
@@ -38,6 +43,11 @@ trait AsRepositoryProxy
     public function update(array $filters, array $attributes): int
     {
         return $this->getProxyRepository()->update($filters, $attributes);
+    }
+
+    public function decrement(array $filters, string $column, int $amount = 1): int
+    {
+        return $this->getProxyRepository()->decrement($filters, $column, $amount);
     }
 
     public function delete(array $filters = []): int
