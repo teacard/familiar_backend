@@ -16,11 +16,15 @@ interface RepositoryInterface
 
     public function first(array $filters = []): ?Model;
 
+    public function count(array $filters = []): int;
+
     public function exists(array $filters = []): bool;
 
     public function create(array $attributes): Model;
 
     public function update(array $filters, array $attributes): int;
+
+    public function decrement(array $filters, string $column, int $amount = 1): int;
 
     public function delete(array $filters = []): int;
 }

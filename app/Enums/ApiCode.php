@@ -14,4 +14,11 @@ enum ApiCode: string
     case ROLE_IN_USE = 'ROLE_IN_USE';
     /** 玩家帳號非停用狀態，無法刪除 */
     case PLAYER_NOT_SUSPENDED = 'PLAYER_NOT_SUSPENDED';
+
+    /** 已發佈的公告不可修改發佈時間、到期時間與目標對象 */
+    case ANNOUNCEMENT_PUBLISHED_IMMUTABLE = 'ANNOUNCEMENT_PUBLISHED_IMMUTABLE';
+    /** 已發佈的公告不可刪除 */
+    case ANNOUNCEMENT_PUBLISHED_UNDELETABLE = 'ANNOUNCEMENT_PUBLISHED_UNDELETABLE';
+    /** 置頂數量已達上限 */
+    case ANNOUNCEMENT_PIN_LIMIT_REACHED = 'ANNOUNCEMENT_PIN_LIMIT_REACHED';
 }

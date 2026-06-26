@@ -13,3 +13,9 @@ Schedule::command('telescope:prune --hours=48')->daily();
 
 // 每日清除暫存集合中建立超過 1 天的媒體，避免未被採用的上傳檔案殘留
 Schedule::command('media:prune-temporary')->daily();
+
+// 每分鐘依發布/到期時間自動轉換公告狀態（SCHEDULED → PUBLISHED → EXPIRED）
+Schedule::command('announcements:transition-statuses')->everyMinute();
+
+// 每日刪除到期時間已超過 6 個月的公告，避免資料無限成長
+Schedule::command('announcements:prune-expired')->daily();

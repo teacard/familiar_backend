@@ -32,6 +32,15 @@ enum Name: string
     /** 管理權限 */
     case MANAGE_PERMISSIONS = 'manage_permissions';
 
+    /** 查看公告 */
+    case VIEW_ANNOUNCEMENTS = 'view_announcements';
+    /** 新增公告 */
+    case CREATE_ANNOUNCEMENTS = 'create_announcements';
+    /** 編輯公告 */
+    case EDIT_ANNOUNCEMENTS = 'edit_announcements';
+    /** 刪除公告 */
+    case DELETE_ANNOUNCEMENTS = 'delete_announcements';
+
     public const string SWAGGER_API_ENUM_PROPERTY = 'permission.name';
     public const array SWAGGER_API_ENUM_OPTIONS = [
         '查看使用者' => self::VIEW_USERS,
@@ -46,6 +55,10 @@ enum Name: string
         '指派角色' => self::ASSIGN_ROLES,
         '查看權限' => self::VIEW_PERMISSIONS,
         '管理權限' => self::MANAGE_PERMISSIONS,
+        '查看公告' => self::VIEW_ANNOUNCEMENTS,
+        '新增公告' => self::CREATE_ANNOUNCEMENTS,
+        '編輯公告' => self::EDIT_ANNOUNCEMENTS,
+        '刪除公告' => self::DELETE_ANNOUNCEMENTS,
     ];
 
     /** 取得翻譯後 label 對應 enum case 的陣列，供 Controller 回傳 */
