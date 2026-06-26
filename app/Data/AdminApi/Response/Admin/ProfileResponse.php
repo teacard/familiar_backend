@@ -4,7 +4,6 @@ namespace App\Data\AdminApi\Response\Admin;
 
 use App\Enums\Media\CollectionName;
 use App\Models\Admin;
-use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelData\Data;
 
 class ProfileResponse extends Data
@@ -14,7 +13,8 @@ class ProfileResponse extends Data
         public string $photo,
         /** @var array<int, string> */
         public array $permissions,
-    ) {}
+    ) {
+    }
 
     public static function fromModel(Admin $admin): self
     {
