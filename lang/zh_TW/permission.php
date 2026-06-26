@@ -10,6 +10,12 @@ return [
         Name::EDIT_USERS->value => '編輯使用者',
         Name::DELETE_USERS->value => '刪除使用者',
 
+        /** 玩家管理 */
+        Name::VIEW_PLAYERS->value => '查看玩家',
+        Name::CREATE_PLAYERS->value => '新增玩家',
+        Name::EDIT_PLAYERS->value => '編輯玩家',
+        Name::DELETE_PLAYERS->value => '刪除玩家',
+
         /** 角色管理 */
         Name::VIEW_ROLES->value => '查看角色',
         Name::ASSIGN_ROLES->value => '指派角色',

@@ -18,6 +18,8 @@ interface RepositoryInterface
 
     public function count(array $filters = []): int;
 
+    public function exists(array $filters = []): bool;
+
     public function create(array $attributes): Model;
 
     public function update(array $filters, array $attributes): int;

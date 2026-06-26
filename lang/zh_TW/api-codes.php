@@ -9,6 +9,9 @@ return [
     /** 角色管理 */
     'ROLE_IN_USE' => '此角色已被帳號使用，無法刪除',
 
+    /** 玩家管理 */
+    'PLAYER_NOT_SUSPENDED' => '僅停用狀態的玩家可刪除，請先停用該帳號',
+
     /** 公告管理 */
     'ANNOUNCEMENT_PUBLISHED_IMMUTABLE' => '已發佈的公告不可修改發佈時間、到期時間與目標對象',
     'ANNOUNCEMENT_PUBLISHED_UNDELETABLE' => '已發佈的公告不可刪除',

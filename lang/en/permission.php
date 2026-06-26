@@ -10,6 +10,12 @@ return [
         Name::EDIT_USERS->value => 'Edit Users',
         Name::DELETE_USERS->value => 'Delete Users',
 
+        /** 玩家管理 */
+        Name::VIEW_PLAYERS->value => 'View Players',
+        Name::CREATE_PLAYERS->value => 'Create Players',
+        Name::EDIT_PLAYERS->value => 'Edit Players',
+        Name::DELETE_PLAYERS->value => 'Delete Players',
+
         /** 角色管理 */
         Name::VIEW_ROLES->value => 'View Roles',
         Name::ASSIGN_ROLES->value => 'Assign Roles',
