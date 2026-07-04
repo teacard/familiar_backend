@@ -5,13 +5,13 @@ namespace App\Enums\Announcement;
 enum Status: string
 {
     /** 草稿 */
-    case DRAFT = 'DRAFT';
+    case DRAFT = 'draft';
     /** 排程（待發布） */
-    case SCHEDULED = 'SCHEDULED';
+    case SCHEDULED = 'scheduled';
     /** 已發布 */
-    case PUBLISHED = 'PUBLISHED';
+    case PUBLISHED = 'published';
     /** 已到期 */
-    case EXPIRED = 'EXPIRED';
+    case EXPIRED = 'expired';
 
     public const string SWAGGER_API_ENUM_PROPERTY = 'announcement.status';
     public const array SWAGGER_API_ENUM_OPTIONS = [

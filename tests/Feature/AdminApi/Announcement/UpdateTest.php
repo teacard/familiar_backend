@@ -117,7 +117,7 @@ class UpdateTest extends TestCase
         return array_merge([
             'title' => '更新後標題',
             'content' => '更新後內容',
-            'targetAudience' => 'ALL_USERS',
+            'targetAudience' => 'all_users',
             'publishAt' => now()->addDay()->format('Y-m-d H:i:s'),
             'expiresAt' => now()->addDays(8)->format('Y-m-d H:i:s'),
             'shouldPin' => false,

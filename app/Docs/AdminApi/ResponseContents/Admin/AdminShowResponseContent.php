@@ -2,6 +2,7 @@
 
 namespace App\Docs\AdminApi\ResponseContents\Admin;
 
+use App\Docs\AdminApi\ResponseContents\Media\MediaResponseContent;
 use App\Enums\Admin\Status as StatusEnum;
 use OpenApi\Attributes as OA;
 
@@ -20,14 +21,6 @@ class AdminShowResponseContent
     #[OA\Property(description: '狀態', enum: [StatusEnum::class], example: StatusEnum::ACTIVE->value)]
     public string $status;
 
-    #[OA\Property(
-        description: '頭像（無頭像時為 null）',
-        nullable: true,
-        properties: [
-            new OA\Property(property: 'id', type: 'integer', description: '媒體 ID', example: 1),
-            new OA\Property(property: 'url', type: 'string', description: '媒體完整 URL', example: 'http://localhost/media/1/avatar_abc123.png'),
-        ],
-        type: 'object',
-    )]
+    #[OA\Property(ref: MediaResponseContent::class, description: '頭像（無頭像時為 null）', nullable: true)]
     public ?object $avatar;
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\AdminApi;
 
-use App\Data\AdminApi\Response\Media\MediaUploadResponse;
+use App\Data\AdminApi\Response\Media\MediaResponse;
 use App\Enums\Media\UploadFileType;
 use App\Enums\TemporaryMedia\SystemName;
 use App\Http\Controllers\Controller;
@@ -28,6 +28,6 @@ class MediaController extends Controller
             systemName: SystemName::ADMIN,
         );
 
-        return $this->success(MediaUploadResponse::fromModel($media));
+        return $this->success(MediaResponse::fromMedia($media));
     }
 }

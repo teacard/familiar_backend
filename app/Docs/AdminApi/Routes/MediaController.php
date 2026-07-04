@@ -3,7 +3,7 @@
 namespace App\Docs\AdminApi\Routes;
 
 use App\Docs\AdminApi\Requests\Media\UploadRequest;
-use App\Docs\AdminApi\ResponseContents\Media\MediaUploadResponseContent;
+use App\Docs\AdminApi\ResponseContents\Media\MediaResponseContent;
 use App\Docs\AdminApi\Tags;
 use App\Docs\All\Responses\OkResponse;
 use App\Docs\All\Responses\UnauthorizedResponse;
@@ -25,7 +25,7 @@ class MediaController
         ),
         tags: [Tags::MEDIA],
         responses: [
-            new OkResponse(contentRef: MediaUploadResponseContent::class),
+            new OkResponse(contentRef: MediaResponseContent::class),
             new UnauthorizedResponse(),
             new UnprocessableResponse(),
         ],

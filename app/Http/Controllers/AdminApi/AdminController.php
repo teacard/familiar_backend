@@ -68,7 +68,7 @@ class AdminController extends Controller
             $admin = $this->adminService->createAdmin($data);
 
             if (!is_null($data->mediaId)) {
-                $this->mediaService->transferToAdmin($data->mediaId, $admin);
+                $this->mediaService->transferToModel($data->mediaId, $admin, CollectionName::ADMIN);
             }
         });
 
@@ -110,7 +110,7 @@ class AdminController extends Controller
             if (is_null($data->mediaId)) {
                 $admin->clearMediaCollection(CollectionName::ADMIN->value);
             } else {
-                $this->mediaService->transferToAdmin($data->mediaId, $admin);
+                $this->mediaService->transferToModel($data->mediaId, $admin, CollectionName::ADMIN);
             }
         });
 

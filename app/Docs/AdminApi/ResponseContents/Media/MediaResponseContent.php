@@ -4,8 +4,8 @@ namespace App\Docs\AdminApi\ResponseContents\Media;
 
 use OpenApi\Attributes as OA;
 
-#[OA\Schema(schema: 'AdminApi.Media.MediaUploadResponseContent', description: '已上傳的暫存媒體')]
-class MediaUploadResponseContent
+#[OA\Schema(schema: 'AdminApi.Media.MediaResponseContent', description: '媒體')]
+class MediaResponseContent
 {
     #[OA\Property(description: '媒體 ID', example: 1)]
     public int $id;

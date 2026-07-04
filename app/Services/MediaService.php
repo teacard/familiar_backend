@@ -7,15 +7,16 @@ use App\Enums\Media\CustomProperty;
 use App\Enums\Media\UploadFileType;
 use App\Enums\TemporaryMedia\SystemName;
 use App\Exceptions\NotFoundException;
-use App\Models\Admin;
 use App\Models\TemporaryMedia;
 use App\Repositories\Applications\Media\MediaRepository;
 use App\Repositories\Applications\TemporaryMedia\TemporaryMediaRepository;
 use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Traits\AsRepositoryProxy;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MediaService
@@ -64,14 +65,27 @@ class MediaService
         return $count;
     }
 
-    /** 將指定暫存媒體改掛至後台人員的頭像集合（僅更新 DB；找不到時回 false） */
-    public function transferToAdmin(int $mediaId, Admin $admin): bool
+    /** 將指定暫存媒體改掛至目標 model 的指定媒體集合（僅更新 DB；找不到時回 false）；若該集合為單檔覆蓋，先清除既有媒體避免殘留 */
+    public function transferToModel(int $mediaId, Model $model, CollectionName $collectionName): bool
     {
+        if ($model instanceof HasMedia) {
+            // mediaId 已是目前掛載的媒體（例如未換圖時前端原樣送回既有 id）：視為不變更，不做任何動作。
+            // 若不擋下這個情境，下面的 clearMediaCollection() 會先刪除這筆媒體，
+            // 但它已不在 temporary 集合內，updateTemporaryToModel() 的轉移查詢會找不到對象而更新 0 筆，
+            // 導致該媒體被刪除又沒有重新掛回，商品/model 變成沒有圖片。
+            $currentMedia = $model->getFirstMedia($collectionName->value);
+            if ($currentMedia && $currentMedia->id === $mediaId) {
+                return true;
+            }
+
+            $model->clearMediaCollection($collectionName->value);
+        }
+
         return (bool)$this->repository->updateTemporaryToModel(
             mediaId: $mediaId,
-            modelType: $admin->getMorphClass(),
-            modelId: $admin->id,
-            collectionName: CollectionName::ADMIN->value,
+            modelType: $model->getMorphClass(),
+            modelId: $model->getKey(),
+            collectionName: $collectionName->value,
         );
     }
 

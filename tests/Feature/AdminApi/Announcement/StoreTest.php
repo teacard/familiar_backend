@@ -170,7 +170,7 @@ class StoreTest extends TestCase
         return array_merge([
             'title' => '系統維護公告',
             'content' => '系統將於本週日進行維護。',
-            'targetAudience' => 'ALL_USERS',
+            'targetAudience' => 'all_users',
             'publishAt' => now()->addDay()->format('Y-m-d H:i:s'),
             'expiresAt' => now()->addDays(8)->format('Y-m-d H:i:s'),
             'shouldPin' => false,

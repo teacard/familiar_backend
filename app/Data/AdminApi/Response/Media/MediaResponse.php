@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Data\AdminApi\Response\Admin;
+namespace App\Data\AdminApi\Response\Media;
 
 use Spatie\LaravelData\Data;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class AdminAvatarResponse extends Data
+class MediaResponse extends Data
 {
     public function __construct(
         public int $id,
