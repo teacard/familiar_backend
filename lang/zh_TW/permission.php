@@ -27,5 +27,17 @@ return [
         Name::CREATE_ANNOUNCEMENTS->value => '新增公告',
         Name::EDIT_ANNOUNCEMENTS->value => '編輯公告',
         Name::DELETE_ANNOUNCEMENTS->value => '刪除公告',
+
+        /** 商品管理 */
+        Name::VIEW_PRODUCTS->value => '查看商品',
+        Name::CREATE_PRODUCTS->value => '新增商品',
+        Name::EDIT_PRODUCTS->value => '編輯商品',
+        Name::DELETE_PRODUCTS->value => '刪除商品',
+
+        /** 商品類別管理 */
+        Name::VIEW_PRODUCT_TYPES->value => '查看商品類別',
+        Name::CREATE_PRODUCT_TYPES->value => '新增商品類別',
+        Name::EDIT_PRODUCT_TYPES->value => '編輯商品類別',
+        Name::DELETE_PRODUCT_TYPES->value => '刪除商品類別',
     ],
 ];

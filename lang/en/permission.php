@@ -27,5 +27,17 @@ return [
         Name::CREATE_ANNOUNCEMENTS->value => 'Create Announcements',
         Name::EDIT_ANNOUNCEMENTS->value => 'Edit Announcements',
         Name::DELETE_ANNOUNCEMENTS->value => 'Delete Announcements',
+
+        /** 商品管理 */
+        Name::VIEW_PRODUCTS->value => 'View Products',
+        Name::CREATE_PRODUCTS->value => 'Create Products',
+        Name::EDIT_PRODUCTS->value => 'Edit Products',
+        Name::DELETE_PRODUCTS->value => 'Delete Products',
+
+        /** 商品類別管理 */
+        Name::VIEW_PRODUCT_TYPES->value => 'View Product Types',
+        Name::CREATE_PRODUCT_TYPES->value => 'Create Product Types',
+        Name::EDIT_PRODUCT_TYPES->value => 'Edit Product Types',
+        Name::DELETE_PRODUCT_TYPES->value => 'Delete Product Types',
     ],
 ];

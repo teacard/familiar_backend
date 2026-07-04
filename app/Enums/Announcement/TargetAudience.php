@@ -5,11 +5,11 @@ namespace App\Enums\Announcement;
 enum TargetAudience: string
 {
     /** 所有使用者 */
-    case ALL_USERS = 'ALL_USERS';
+    case ALL_USERS = 'all_users';
     /** VIP 會員 */
-    case VIP = 'VIP';
+    case VIP = 'vip';
     /** 一般會員 */
-    case GENERAL = 'GENERAL';
+    case GENERAL = 'general';
 
     public const string SWAGGER_API_ENUM_PROPERTY = 'announcement.target_audience';
     public const array SWAGGER_API_ENUM_OPTIONS = [

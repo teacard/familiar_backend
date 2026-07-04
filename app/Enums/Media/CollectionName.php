@@ -9,4 +9,10 @@ enum CollectionName: string
 
     /** 後台：後台人員相關媒體（目前為頭像，單檔覆蓋） */
     case ADMIN = 'admin';
+
+    /** 商品：商品主圖，單檔覆蓋 */
+    case PRODUCT = 'product';
+
+    /** 道具：道具圖片，單檔覆蓋 */
+    case ITEM = 'item';
 }

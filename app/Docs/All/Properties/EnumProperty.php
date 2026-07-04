@@ -13,28 +13,20 @@ class EnumProperty extends OA\Property
         array $schemaEnumOptions,
     ) {
         $values = [];
-        foreach ($schemaEnumOptions as $case) {
+        $example = [];
+        foreach ($schemaEnumOptions as $label => $case) {
             $values[] = $case->value;
+            $example[$label] = $case->value;
         }
 
         parent::__construct(
             property: $property,
-            type: 'array',
-            items: new OA\Items(
-                properties: [
-                    new OA\Property(
-                        property: 'value',
-                        type: 'string',
-                        enum: $values,
-                        example: $values[0] ?? Generator::UNDEFINED,
-                    ),
-                    new OA\Property(
-                        property: 'label',
-                        type: 'string',
-                        example: array_key_first($schemaEnumOptions) ?? Generator::UNDEFINED,
-                    ),
-                ],
+            type: 'object',
+            additionalProperties: new OA\AdditionalProperties(
+                type: 'string',
+                enum: $values,
             ),
+            example: $example ?: Generator::UNDEFINED,
         );
     }
 }

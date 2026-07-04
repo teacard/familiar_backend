@@ -10,6 +10,8 @@ use OpenApi\Attributes as OA;
 #[OA\Tag(name: Tags::ROLE, description: '角色管理相關 API')]
 #[OA\Tag(name: Tags::MEDIA, description: '媒體上傳相關 API')]
 #[OA\Tag(name: Tags::ANNOUNCEMENT, description: '公告管理相關 API')]
+#[OA\Tag(name: Tags::PRODUCT_TYPE, description: '商品類別管理相關 API')]
+#[OA\Tag(name: Tags::PRODUCT, description: '商品管理相關 API')]
 class Tags
 {
     public const string AUTH = '後台認證';
@@ -18,4 +20,6 @@ class Tags
     public const string ROLE = '角色管理';
     public const string MEDIA = '媒體管理';
     public const string ANNOUNCEMENT = '公告管理';
+    public const string PRODUCT_TYPE = '商品類別管理';
+    public const string PRODUCT = '商品管理';
 }
