@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminApi;
 use App\Enums\Admin\Status as AdminStatus;
 use App\Enums\Announcement\Status as AnnouncementStatus;
 use App\Enums\Announcement\TargetAudience;
+use App\Enums\Item\Status as ItemStatus;
 use App\Enums\Permission\Name;
 use App\Enums\Player\Status as PlayerStatus;
 use App\Enums\Product\Status as ProductStatus;
@@ -58,6 +59,14 @@ class EnumController extends Controller
     {
         return $this->success([
             ProductStatus::SWAGGER_API_ENUM_PROPERTY => ProductStatus::SWAGGER_API_ENUM_OPTIONS,
+        ]);
+    }
+
+    /** 固定選項值與文字的對應表 - 道具啟用狀態 */
+    public function itemStatus(): JsonResponse
+    {
+        return $this->success([
+            ItemStatus::SWAGGER_API_ENUM_PROPERTY => ItemStatus::SWAGGER_API_ENUM_OPTIONS,
         ]);
     }
 }

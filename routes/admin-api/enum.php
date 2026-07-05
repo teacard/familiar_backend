@@ -10,4 +10,5 @@ Route::controller(EnumController::class)->prefix('enums')->group(function () {
     Route::get('announcement-target-audience', 'announcementTargetAudience');
     Route::get('player-status', 'playerStatus');
     Route::get('product-status', 'productStatus');
+    Route::get('item-status', 'itemStatus');
 });
