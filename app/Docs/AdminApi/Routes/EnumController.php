@@ -6,6 +6,7 @@ use App\Docs\AdminApi\ResponseContents\Enum\AdminStatusResponseContent;
 use App\Docs\AdminApi\ResponseContents\Enum\AnnouncementStatusResponseContent;
 use App\Docs\AdminApi\ResponseContents\Enum\AnnouncementTargetAudienceResponseContent;
 use App\Docs\AdminApi\ResponseContents\Enum\EnumResponseContent;
+use App\Docs\AdminApi\ResponseContents\Enum\ItemStatusResponseContent;
 use App\Docs\AdminApi\ResponseContents\Enum\PlayerStatusResponseContent;
 use App\Docs\AdminApi\ResponseContents\Enum\ProductStatusResponseContent;
 use App\Docs\All\Responses\OkResponse;
@@ -94,6 +95,20 @@ class EnumController
     )]
     /** 取得商品狀態 Enum 選項對應表 */
     public function productStatus(): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/enums/item-status',
+        operationId: 'admin-api.enums.item-status',
+        summary: '取得道具啟用狀態 Enum 選項對應表',
+        tags: ['Enum'],
+        responses: [
+            new OkResponse(contentRef: ItemStatusResponseContent::class),
+        ],
+    )]
+    /** 取得道具啟用狀態 Enum 選項對應表 */
+    public function itemStatus(): void
     {
     }
 }
