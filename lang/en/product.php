@@ -6,6 +6,7 @@ return [
             'keyword' => 'Keyword',
             'name' => 'Product Name',
             'productTypeId' => 'Product Type',
+            'itemId' => 'Item',
             'amount' => 'Amount',
             'status' => 'Status',
             'mediaId' => 'Product Image Media ID',

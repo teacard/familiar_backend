@@ -23,7 +23,7 @@ class ProductService
     ) {
     }
 
-    /** 列表（關鍵字 + 種類 + 狀態篩選 + 分頁，含商品類別 eager load） */
+    /** 列表（關鍵字 + 種類 + 道具 + 狀態篩選 + 分頁，含商品類別 eager load） */
     public function listProducts(IndexRequestData $data): LengthAwarePaginator
     {
         $paginator = $this->paginate(
@@ -32,6 +32,11 @@ class ProductService
             filters: [
                 'keyword' => $data->keyword,
                 'productTypeId' => $data->productTypeId,
+                'hasProductReward' => is_null($data->itemId) ? null : [
+                    'hasItem' => [
+                        'id' => $data->itemId,
+                    ],
+                ],
                 'status' => $data->status?->value,
                 'orderByDesc' => ['created_at', 'id'],
             ],

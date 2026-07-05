@@ -4,6 +4,7 @@ namespace Tests\Feature\AdminApi\Product;
 
 use App\Enums\Product\Status;
 use App\Models\Admin;
+use App\Models\Item;
 use App\Models\Product;
 use App\Models\ProductType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -77,6 +78,29 @@ class ListTest extends TestCase
         $response->assertOk();
         $names = collect($response->json('data.items'))->pluck('name');
         $this->assertContains($productA->name, $names);
+        $this->assertNotContains('商品B', $names);
+    }
+
+    /** itemId 篩選，只回傳獎勵內容包含該道具的商品 */
+    public function testFiltersByItemId(): void
+    {
+        // GIVEN 有權限的管理員，及各自獎勵內容含不同道具的兩筆商品
+        $actor = $this->adminWith('view_products');
+        $itemA = Item::factory()->create();
+        $itemB = Item::factory()->create();
+        $productA = Product::factory()->create(['name' => '商品A']);
+        $productA->productRewards()->create(['item_id' => $itemA->id, 'quantity' => 1]);
+        $productB = Product::factory()->create(['name' => '商品B']);
+        $productB->productRewards()->create(['item_id' => $itemB->id, 'quantity' => 1]);
+
+        // WHEN  發送 GET /admin-api/products?itemId={itemA}
+        $response = $this->actingAs($actor, 'admin')
+            ->getJson("/admin-api/products?itemId={$itemA->id}");
+
+        // THEN  只回傳獎勵內容含 itemA 的商品
+        $response->assertOk();
+        $names = collect($response->json('data.items'))->pluck('name');
+        $this->assertContains('商品A', $names);
         $this->assertNotContains('商品B', $names);
     }
 

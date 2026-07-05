@@ -21,4 +21,7 @@ return [
 
     /** 商品類別管理 */
     ApiCode::PRODUCT_TYPE_IN_USE->value => 'This product type is in use by a product and cannot be deleted.',
+
+    /** 道具管理 */
+    ApiCode::ITEM_IN_USE->value => 'This item is in use by a product reward and cannot be deleted.',
 ];

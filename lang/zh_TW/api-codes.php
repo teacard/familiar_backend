@@ -21,4 +21,7 @@ return [
 
     /** 商品類別管理 */
     ApiCode::PRODUCT_TYPE_IN_USE->value => '此商品類別已被商品使用，無法刪除',
+
+    /** 道具管理 */
+    ApiCode::ITEM_IN_USE->value => '此道具已被商品獎勵明細使用，無法刪除',
 ];

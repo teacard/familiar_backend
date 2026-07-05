@@ -59,6 +59,15 @@ enum Name: string
     /** 刪除商品類別 */
     case DELETE_PRODUCT_TYPES = 'delete_product_types';
 
+    /** 查看道具 */
+    case VIEW_ITEMS = 'view_items';
+    /** 新增道具 */
+    case CREATE_ITEMS = 'create_items';
+    /** 編輯道具 */
+    case EDIT_ITEMS = 'edit_items';
+    /** 刪除道具 */
+    case DELETE_ITEMS = 'delete_items';
+
     public const string SWAGGER_API_ENUM_PROPERTY = 'permission.name';
     public const array SWAGGER_API_ENUM_OPTIONS = [
         '查看使用者' => self::VIEW_USERS,
@@ -90,5 +99,10 @@ enum Name: string
         '新增商品類別' => self::CREATE_PRODUCT_TYPES,
         '編輯商品類別' => self::EDIT_PRODUCT_TYPES,
         '刪除商品類別' => self::DELETE_PRODUCT_TYPES,
+
+        '查看道具' => self::VIEW_ITEMS,
+        '新增道具' => self::CREATE_ITEMS,
+        '編輯道具' => self::EDIT_ITEMS,
+        '刪除道具' => self::DELETE_ITEMS,
     ];
 }
