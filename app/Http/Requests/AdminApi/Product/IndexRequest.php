@@ -13,6 +13,7 @@ class IndexRequest extends FormRequest
         return [
             'keyword' => ['nullable', 'string', 'max:50'],
             'productTypeId' => ['nullable', 'integer'],
+            'itemId' => ['nullable', 'integer'],
             'status' => ['nullable', Rule::enum(Status::class)],
         ] + config('pagination.request');
     }
@@ -22,6 +23,7 @@ class IndexRequest extends FormRequest
         return [
             'keyword' => trans('product.attributes.adminapi.keyword'),
             'productTypeId' => trans('product.attributes.adminapi.productTypeId'),
+            'itemId' => trans('product.attributes.adminapi.itemId'),
             'status' => trans('product.attributes.adminapi.status'),
         ] + trans('pagination.attributes');
     }

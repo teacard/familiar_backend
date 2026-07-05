@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\Item\Status;
 use App\Enums\Media\CollectionName;
 use Database\Factories\ItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -14,13 +16,26 @@ class Item extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'status'];
+
+    /** 引用此道具的商品獎勵明細 */
+    public function productRewards(): HasMany
+    {
+        return $this->hasMany(ProductReward::class);
+    }
 
     /** 註冊道具媒體集合：單檔覆蓋（道具圖片） */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection(CollectionName::ITEM->value)
             ->singleFile();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'status' => Status::class,
+        ];
     }
 
     protected static function newFactory(): ItemFactory

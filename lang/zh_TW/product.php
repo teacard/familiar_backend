@@ -6,6 +6,7 @@ return [
             'keyword' => '關鍵字',
             'name' => '商品名稱',
             'productTypeId' => '商品類別',
+            'itemId' => '道具',
             'amount' => '價格',
             'status' => '上架狀態',
             'mediaId' => '商品主圖媒體 ID',

@@ -24,4 +24,6 @@ enum ApiCode: string
 
     /** 商品類別已被商品使用，無法刪除 */
     case PRODUCT_TYPE_IN_USE = 'PRODUCT_TYPE_IN_USE';
+    /** 道具已被商品獎勵明細使用，無法刪除 */
+    case ITEM_IN_USE = 'ITEM_IN_USE';
 }

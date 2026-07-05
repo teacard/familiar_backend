@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Data\AdminApi\Request\Product;
+namespace App\Data\AdminApi\Request\Item;
 
-use App\Enums\Product\Status;
-use App\Http\Requests\AdminApi\Product\IndexRequest;
+use App\Enums\Item\Status;
+use App\Http\Requests\AdminApi\Item\IndexRequest;
 
 readonly class IndexRequestData
 {
     public function __construct(
         public ?string $keyword,
-        public ?int $productTypeId,
-        public ?int $itemId,
         public ?Status $status,
         public int $perPage,
         public int $page,
@@ -21,8 +19,6 @@ readonly class IndexRequestData
     {
         return new self(
             keyword: $request->keyword,
-            productTypeId: $request->productTypeId,
-            itemId: $request->itemId,
             status: is_null($request->status) ? null : Status::from($request->status),
             perPage: (int)($request->perPage ?? config('pagination.perPage.default')),
             page: (int)($request->page ?? config('pagination.page.default')),

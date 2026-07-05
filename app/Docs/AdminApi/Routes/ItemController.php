@@ -2,55 +2,44 @@
 
 namespace App\Docs\AdminApi\Routes;
 
-use App\Docs\AdminApi\Requests\Product\StoreRequest;
-use App\Docs\AdminApi\Requests\Product\UpdateRequest;
-use App\Docs\AdminApi\ResponseContents\Product\ProductPaginatedResponseContent;
-use App\Docs\AdminApi\ResponseContents\Product\ProductResponseContent;
+use App\Docs\AdminApi\Requests\Item\StoreRequest;
+use App\Docs\AdminApi\Requests\Item\UpdateRequest;
+use App\Docs\AdminApi\ResponseContents\Item\ItemPaginatedResponseContent;
+use App\Docs\AdminApi\ResponseContents\Item\ItemSelectResponseContent;
+use App\Docs\AdminApi\ResponseContents\Item\ItemShowResponseContent;
 use App\Docs\AdminApi\Tags;
 use App\Docs\All\RequestBodies\JsonContentRequestBody;
 use App\Docs\All\Responses\ForbiddenResponse;
 use App\Docs\All\Responses\NotFoundResponse;
 use App\Docs\All\Responses\OkResponse;
 use App\Docs\All\Responses\UnauthorizedResponse;
-use App\Enums\Product\Status;
+use App\Docs\All\Responses\UnprocessableResponse;
+use App\Enums\ApiCode;
+use App\Enums\Item\Status;
 use OpenApi\Attributes as OA;
 
-class ProductController
+class ItemController
 {
     #[OA\Get(
-        path: '/products',
-        operationId: 'admin-api.product.index',
-        summary: '取得商品列表',
+        path: '/items',
+        operationId: 'admin-api.item.index',
+        summary: '道具管理-列表',
         security: [['sanctum' => []]],
-        tags: [Tags::PRODUCT],
+        tags: [Tags::ITEM],
         parameters: [
             new OA\Parameter(
                 name: 'keyword',
                 in: 'query',
                 required: false,
-                description: '關鍵字（比對商品名稱）',
-                schema: new OA\Schema(type: 'string', maxLength: 50, nullable: true, example: '禮包'),
-            ),
-            new OA\Parameter(
-                name: 'productTypeId',
-                in: 'query',
-                required: false,
-                description: '商品類別 ID（對應 product_types.id）',
-                schema: new OA\Schema(type: 'integer', nullable: true, example: 1),
-            ),
-            new OA\Parameter(
-                name: 'itemId',
-                in: 'query',
-                required: false,
-                description: '道具 ID（篩選獎勵內容包含此道具的商品）',
-                schema: new OA\Schema(type: 'integer', nullable: true, example: 1),
+                description: '關鍵字（模糊搜尋道具名稱）',
+                schema: new OA\Schema(type: 'string', maxLength: 10, nullable: true, example: '新手'),
             ),
             new OA\Parameter(
                 name: 'status',
                 in: 'query',
                 required: false,
-                description: '上架狀態（不帶則回傳所有狀態）',
-                schema: new OA\Schema(type: 'string', nullable: true, enum: [Status::class], example: Status::PUBLISHED->value),
+                description: '啟用狀態（不帶則回傳所有狀態）',
+                schema: new OA\Schema(type: 'string', nullable: true, enum: [Status::class], example: Status::ACTIVE->value),
             ),
             new OA\Parameter(
                 name: 'perPage',
@@ -68,7 +57,7 @@ class ProductController
             ),
         ],
         responses: [
-            new OkResponse(contentRef: ProductPaginatedResponseContent::class),
+            new OkResponse(contentRef: ItemPaginatedResponseContent::class),
             new UnauthorizedResponse(),
             new ForbiddenResponse(),
         ],
@@ -77,13 +66,62 @@ class ProductController
     {
     }
 
+    #[OA\Get(
+        path: '/items/select',
+        operationId: 'admin-api.item.select',
+        summary: '道具管理-下拉選單',
+        security: [['sanctum' => []]],
+        tags: [Tags::ITEM],
+        parameters: [
+            new OA\Parameter(
+                name: 'isActive',
+                in: 'query',
+                required: false,
+                description: '是否僅回傳啟用中道具（true：僅啟用中，供建立/編輯商品獎勵時使用；不帶或 false：回傳所有狀態，供依道具篩選商品時使用）',
+                schema: new OA\Schema(type: 'boolean', nullable: true, example: true),
+            ),
+        ],
+        responses: [
+            new OkResponse(contentItemsRef: ItemSelectResponseContent::class),
+            new UnauthorizedResponse(),
+        ],
+    )]
+    public function select(): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/items/{id}',
+        operationId: 'admin-api.item.show',
+        summary: '道具管理-詳情',
+        security: [['sanctum' => []]],
+        tags: [Tags::ITEM],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'integer', example: 1),
+            ),
+        ],
+        responses: [
+            new OkResponse(contentRef: ItemShowResponseContent::class),
+            new UnauthorizedResponse(),
+            new ForbiddenResponse(),
+            new NotFoundResponse(),
+        ],
+    )]
+    public function show(): void
+    {
+    }
+
     #[OA\Post(
-        path: '/products',
-        operationId: 'admin-api.product.store',
-        summary: '新增商品',
+        path: '/items',
+        operationId: 'admin-api.item.store',
+        summary: '道具管理-新增',
         security: [['sanctum' => []]],
         requestBody: new JsonContentRequestBody(contentRef: StoreRequest::class),
-        tags: [Tags::PRODUCT],
+        tags: [Tags::ITEM],
         responses: [
             new OkResponse(withoutContent: true),
             new UnauthorizedResponse(),
@@ -94,38 +132,13 @@ class ProductController
     {
     }
 
-    #[OA\Get(
-        path: '/products/{id}',
-        operationId: 'admin-api.product.show',
-        summary: '取得商品詳情',
-        security: [['sanctum' => []]],
-        tags: [Tags::PRODUCT],
-        parameters: [
-            new OA\Parameter(
-                name: 'id',
-                in: 'path',
-                required: true,
-                schema: new OA\Schema(type: 'integer', example: 1),
-            ),
-        ],
-        responses: [
-            new OkResponse(contentRef: ProductResponseContent::class),
-            new UnauthorizedResponse(),
-            new ForbiddenResponse(),
-            new NotFoundResponse(),
-        ],
-    )]
-    public function show(): void
-    {
-    }
-
     #[OA\Put(
-        path: '/products/{id}',
-        operationId: 'admin-api.product.update',
-        summary: '更新商品',
+        path: '/items/{id}',
+        operationId: 'admin-api.item.update',
+        summary: '道具管理-編輯',
         security: [['sanctum' => []]],
         requestBody: new JsonContentRequestBody(contentRef: UpdateRequest::class),
-        tags: [Tags::PRODUCT],
+        tags: [Tags::ITEM],
         parameters: [
             new OA\Parameter(
                 name: 'id',
@@ -146,11 +159,11 @@ class ProductController
     }
 
     #[OA\Delete(
-        path: '/products/{id}',
-        operationId: 'admin-api.product.destroy',
-        summary: '刪除商品',
+        path: '/items/{id}',
+        operationId: 'admin-api.item.destroy',
+        summary: '道具管理-刪除',
         security: [['sanctum' => []]],
-        tags: [Tags::PRODUCT],
+        tags: [Tags::ITEM],
         parameters: [
             new OA\Parameter(
                 name: 'id',
@@ -164,6 +177,7 @@ class ProductController
             new UnauthorizedResponse(),
             new ForbiddenResponse(),
             new NotFoundResponse(),
+            new UnprocessableResponse(apiCodeEnums: [ApiCode::ITEM_IN_USE]),
         ],
     )]
     public function destroy(): void
