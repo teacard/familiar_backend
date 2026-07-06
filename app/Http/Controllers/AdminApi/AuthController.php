@@ -10,18 +10,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminApi\Auth\LoginRequest;
 use App\Models\Admin;
 use App\Services\AuthService;
+use App\Services\RecaptchaService;
 use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
     public function __construct(
         protected AuthService $authService,
+        protected RecaptchaService $recaptchaService,
     ) {
     }
 
     /** 後台登入 */
     public function login(LoginRequest $request): JsonResponse
     {
+        $this->recaptchaService->verify(
+            $request->recaptcha_token,
+            $request->ip(),
+            config('services.recaptcha.actions.admin_login'),
+        );
+
         $admin = $this->authService->login(
             LoginRequestData::fromRequest($request)
         );

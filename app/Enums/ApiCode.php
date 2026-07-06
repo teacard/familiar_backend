@@ -8,6 +8,8 @@ enum ApiCode: string
     case INVALID_CREDENTIALS = 'INVALID_CREDENTIALS';
     /** 登入嘗試次數過多 */
     case TOO_MANY_LOGIN_ATTEMPTS = 'TOO_MANY_LOGIN_ATTEMPTS';
+    /** reCAPTCHA 驗證失敗 */
+    case RECAPTCHA_VERIFICATION_FAILED = 'RECAPTCHA_VERIFICATION_FAILED';
     /** 無權存取 Telescope */
     case TELESCOPE_ACCESS_FORBIDDEN = 'TELESCOPE_ACCESS_FORBIDDEN';
     /** 角色已被 admin 帳號使用，無法刪除 */

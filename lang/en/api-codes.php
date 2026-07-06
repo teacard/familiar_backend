@@ -5,6 +5,7 @@ use App\Enums\ApiCode;
 return [
     ApiCode::INVALID_CREDENTIALS->value => 'Invalid credentials.',
     ApiCode::TOO_MANY_LOGIN_ATTEMPTS->value => 'Too many attempts. Please try again in :seconds seconds.',
+    ApiCode::RECAPTCHA_VERIFICATION_FAILED->value => 'reCAPTCHA verification failed. Please refresh the page and try again.',
 
     ApiCode::TELESCOPE_ACCESS_FORBIDDEN->value => 'This account is not allowed to access Telescope.',
 
