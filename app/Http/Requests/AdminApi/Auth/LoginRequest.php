@@ -11,6 +11,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
+            'recaptcha_token' => ['required', 'string'],
         ];
     }
 
@@ -19,6 +20,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => trans('admin.attributes.adminapi.email'),
             'password' => trans('admin.attributes.adminapi.password'),
+            'recaptcha_token' => trans('admin.attributes.adminapi.recaptcha_token'),
         ];
     }
 }

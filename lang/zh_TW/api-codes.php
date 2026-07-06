@@ -5,6 +5,7 @@ use App\Enums\ApiCode;
 return [
     ApiCode::INVALID_CREDENTIALS->value => '帳號或密碼錯誤',
     ApiCode::TOO_MANY_LOGIN_ATTEMPTS->value => '嘗試次數過多，請於 :seconds 秒後再試。',
+    ApiCode::RECAPTCHA_VERIFICATION_FAILED->value => 'reCAPTCHA 驗證失敗，請重新整理頁面後再試一次',
 
     ApiCode::TELESCOPE_ACCESS_FORBIDDEN->value => '此帳號無權存取 Telescope',
 

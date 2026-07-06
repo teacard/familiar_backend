@@ -12,6 +12,7 @@ return [
             'password_confirmation' => 'Password Confirmation',
             'permissions' => 'Permissions',
             'mediaId' => 'Avatar Media ID',
+            'recaptcha_token' => 'reCAPTCHA Token',
         ],
         'api' => [],
     ],

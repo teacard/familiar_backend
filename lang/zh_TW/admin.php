@@ -12,6 +12,7 @@ return [
             'password_confirmation' => '確認密碼',
             'permissions' => '權限',
             'mediaId' => '頭像媒體 ID',
+            'recaptcha_token' => 'reCAPTCHA 驗證',
         ],
         'api' => [],
     ],
