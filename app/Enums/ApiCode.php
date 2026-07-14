@@ -28,4 +28,21 @@ enum ApiCode: string
     case PRODUCT_TYPE_IN_USE = 'PRODUCT_TYPE_IN_USE';
     /** 道具已被商品獎勵明細使用，無法刪除 */
     case ITEM_IN_USE = 'ITEM_IN_USE';
+
+    /** 玩家自助註冊：email 已是正式會員 */
+    case EMAIL_ALREADY_REGISTERED = 'EMAIL_ALREADY_REGISTERED';
+    /** 玩家自助註冊：查無對應草稿，或 email/token 不符 */
+    case REGISTRATION_DRAFT_NOT_FOUND = 'REGISTRATION_DRAFT_NOT_FOUND';
+    /** 玩家自助註冊：尚未寄送驗證碼即嘗試驗證 */
+    case VERIFICATION_CODE_NOT_SENT = 'VERIFICATION_CODE_NOT_SENT';
+    /** 玩家自助註冊：驗證碼不符 */
+    case VERIFICATION_CODE_INVALID = 'VERIFICATION_CODE_INVALID';
+    /** 玩家自助註冊：驗證碼已過期 */
+    case VERIFICATION_CODE_EXPIRED = 'VERIFICATION_CODE_EXPIRED';
+    /** 玩家自助註冊：驗證碼錯誤次數達上限已鎖定 */
+    case VERIFICATION_CODE_LOCKED = 'VERIFICATION_CODE_LOCKED';
+    /** 玩家自助註冊：距上次寄送驗證碼未滿冷卻時間 */
+    case VERIFICATION_CODE_RESEND_TOO_SOON = 'VERIFICATION_CODE_RESEND_TOO_SOON';
+    /** 玩家自助註冊：跳過前置步驟 */
+    case REGISTRATION_STEP_SKIPPED = 'REGISTRATION_STEP_SKIPPED';
 }

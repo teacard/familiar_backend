@@ -14,6 +14,9 @@ Schedule::command('telescope:prune --hours=48')->daily();
 // 每日清除暫存集合中建立超過 1 天的媒體，避免未被採用的上傳檔案殘留
 Schedule::command('media:prune-temporary')->daily();
 
+// 每日清除超過 1 天未更新的玩家自助註冊草稿，避免半成品資料無限累積
+Schedule::command('players:prune-draft')->daily();
+
 // 每分鐘依發布/到期時間自動轉換公告狀態（SCHEDULED → PUBLISHED → EXPIRED）
 Schedule::command('announcements:transition-statuses')->everyMinute();
 

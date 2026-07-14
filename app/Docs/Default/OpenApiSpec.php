@@ -27,6 +27,12 @@ use OpenApi\Attributes as OA;
     description: '身份認證金鑰',
     scheme: 'bearer',
 )]
+#[OA\SecurityScheme(
+    securityScheme: 'registrationToken',
+    type: 'http',
+    description: '玩家自助註冊流程專用的一次性 token（格式 `{draftId}|{secret}`，由 Step①回傳），非登入用的長效憑證',
+    scheme: 'bearer',
+)]
 class OpenApiSpec
 {
 }

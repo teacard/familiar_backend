@@ -15,4 +15,7 @@ enum CollectionName: string
 
     /** 道具：道具圖片，單檔覆蓋 */
     case ITEM = 'item';
+
+    /** 玩家：玩家頭像，單檔覆蓋 */
+    case PLAYER = 'player';
 }
