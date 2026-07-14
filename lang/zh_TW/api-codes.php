@@ -25,4 +25,14 @@ return [
 
     /** 道具管理 */
     ApiCode::ITEM_IN_USE->value => '此道具已被商品獎勵明細使用，無法刪除',
+
+    /** 玩家自助註冊 */
+    ApiCode::EMAIL_ALREADY_REGISTERED->value => '此信箱已註冊為會員',
+    ApiCode::REGISTRATION_DRAFT_NOT_FOUND->value => '查無註冊資料，請重新申請',
+    ApiCode::VERIFICATION_CODE_NOT_SENT->value => '尚未寄送驗證碼，請先取得驗證碼',
+    ApiCode::VERIFICATION_CODE_INVALID->value => '驗證碼不正確',
+    ApiCode::VERIFICATION_CODE_EXPIRED->value => '驗證碼已過期，請重新取得',
+    ApiCode::VERIFICATION_CODE_LOCKED->value => '驗證碼錯誤次數過多，請重新取得驗證碼',
+    ApiCode::VERIFICATION_CODE_RESEND_TOO_SOON->value => '驗證碼寄送過於頻繁，請稍後再試',
+    ApiCode::REGISTRATION_STEP_SKIPPED->value => '尚未完成前一步驟',
 ];

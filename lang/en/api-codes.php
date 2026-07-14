@@ -25,4 +25,14 @@ return [
 
     /** 道具管理 */
     ApiCode::ITEM_IN_USE->value => 'This item is in use by a product reward and cannot be deleted.',
+
+    /** 玩家自助註冊 */
+    ApiCode::EMAIL_ALREADY_REGISTERED->value => 'This email is already registered.',
+    ApiCode::REGISTRATION_DRAFT_NOT_FOUND->value => 'Registration draft not found. Please start over.',
+    ApiCode::VERIFICATION_CODE_NOT_SENT->value => 'No verification code has been sent yet.',
+    ApiCode::VERIFICATION_CODE_INVALID->value => 'Invalid verification code.',
+    ApiCode::VERIFICATION_CODE_EXPIRED->value => 'Verification code has expired. Please request a new one.',
+    ApiCode::VERIFICATION_CODE_LOCKED->value => 'Too many incorrect attempts. Please request a new verification code.',
+    ApiCode::VERIFICATION_CODE_RESEND_TOO_SOON->value => 'Please wait before requesting another verification code.',
+    ApiCode::REGISTRATION_STEP_SKIPPED->value => 'The previous step has not been completed yet.',
 ];

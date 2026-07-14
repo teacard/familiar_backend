@@ -2,13 +2,9 @@
 
 namespace App\Repositories\Applications\Media\Filters;
 
-use App\Repositories\Contracts\FilterInterface;
-use Illuminate\Database\Eloquent\Builder;
+use App\Repositories\Support\Lt;
 
-class CreatedAtLt implements FilterInterface
+class CreatedAtLt extends Lt
 {
-    public function apply(Builder $query, mixed $value): Builder
-    {
-        return $query->where('created_at', '<', $value);
-    }
+    protected string $column = 'created_at';
 }
